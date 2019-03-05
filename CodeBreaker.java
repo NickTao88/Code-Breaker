@@ -9,18 +9,31 @@ public class CodeBreaker {
   public static void main (String [] args) {
     final int SIZE = 4;
     final String VALID_CHARS = "GRBYOP";
-    String [ ] code = new String [SIZE];
-    String [] guess = {"R","G", "B", "Y"};
+    final int TRIES = 10;
+     String [ ] code = new String [SIZE];
     
     
     createCode(VALID_CHARS, SIZE, code);
-    //userInput();
+
     //valid(); (use do-while to keep calling if invalid input)
-    findFullyCorrect (code, guess);
+    String [] guess = userInput(SIZE);
+     ArrayList <String> countFullyCorr = findFullyCorrect (code, guess);
+     System.out.println(countFullyCorr);
     removeFullyCorrect (code, guess);
     //findColourCorrect (code, guess);
     //displayGame();
     
+  }
+  
+  public static String[] userInput (int size) {
+    Scanner sc = new Scanner (System.in);
+    String [] guess = new String [size];
+    for (int i = 0; i < size; i++) {
+      System.out.println("Enter your guess [G,R,B,Y,O,P]");
+      guess[i] = sc.nextLine();
+    }
+    //valid(guess);
+    return guess;
   }
   
   public static String[] createCode (String colours, int size, String[] code) {
