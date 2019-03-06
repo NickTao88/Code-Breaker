@@ -78,7 +78,7 @@ public class CodeBreaker {
     ArrayList <String> fullyCorrect = new ArrayList <String> ();
     fullyCorrect.clear();
     for (int i = 0; i < code.length; i++) {
-      if (code[i].equals(guess[i])) {
+      if (!code[i].equals(guess[i])) {
         fullyCorrect.add(guess[i]);
       }
     }
