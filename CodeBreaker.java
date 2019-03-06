@@ -10,18 +10,33 @@ public class CodeBreaker {
     final int SIZE = 4;
     final String VALID_CHARS = "GRBYOP";
     final int TRIES = 10;
-     String [ ] code = new String [SIZE];
+    String [ ] code = new String [SIZE];
+    boolean userWins = false;
     
+    System.out.println("Welcome to Code Breaker!");
     
     createCode(VALID_CHARS, SIZE, code);
-
-    //valid(); (use do-while to keep calling if invalid input)
-    String [] guess = userInput(SIZE);
-     ArrayList <String> countFullyCorr = findFullyCorrect (code, guess);
-     System.out.println(countFullyCorr);
-    removeFullyCorrect (code, guess);
-    //findColourCorrect (code, guess);
-    //displayGame();
+    for (int i = 0; i < TRIES; i++) {
+      String [] guess = userInput(SIZE);
+      //valid(); (use do-while to keep calling if invalid input)
+      ArrayList <String> countFullyCorr = findFullyCorrect (code, guess);
+      /*if (user guesses code){
+       * userWins =true;
+       * System.out.println("Congratulations! It took you" +(i+1) +" guess to find the code");
+       * break;
+       * }
+       */ 
+      System.out.println(countFullyCorr);
+      removeFullyCorrect (code, guess);
+      //findColourCorrect (code, guess);
+      //displayGame();
+    }
+    if (userWins = false) {
+      System.out.print("I'm sorry, you lose. The correct code was ");
+      for (int i = 0; i < code.length;i++) {
+        System.out.print(code[i]);
+      }
+    }
     
   }
   
