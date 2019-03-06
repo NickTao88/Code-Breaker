@@ -4,20 +4,20 @@ import java.util.ArrayList;
 public class main {
 	public static void main(String args[]) {
 		
-		String[] code = {"Y", "P", "G", "G"};
+		String[] code = {"G", "O", "R"};
 		ArrayList<String> userInput = new ArrayList<String>();
+		userInput.add("Y");
 		userInput.add("G");
-		userInput.add("P");
-		userInput.add("O");
-		userInput.add("R"); 
+		userInput.add("G"); 
 		final String colour = "GRBYOP";
 		
 		System.out.println(findColourCorrect(code, userInput));
-		System.out.println(valid(userInput, colour, 4));
+		//System.out.println(valid(userInput, colour, 4));
 		
 	}
 	
 	public static ArrayList<String> findColourCorrect(String[] code, ArrayList<String> userInput) { //change input for only 
+		userInput = duplicates(userInput);
 		ArrayList<String> colourCorrect = new ArrayList<String>();
 		boolean tempTrue = false;
 		for (int i=0; i<userInput.size(); i++) {
@@ -52,6 +52,14 @@ public class main {
 		}
 	}
 	
-	//public static String displayGame(int[] userInput, )
-	
+	public static ArrayList<String> duplicates(ArrayList<String> userInput) {
+		for (int i=0; i<userInput.size(); i++) {
+			for (int j=0; j<userInput.size(); j++) {
+				if (userInput.get(i).equals(userInput.get(j))) {
+					userInput.remove(i);
+				}
+			}
+		}
+		return userInput;	
+	}	
 }
