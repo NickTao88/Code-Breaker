@@ -12,6 +12,8 @@ public class CodeBreaker {
     final int TRIES = 10;
     String [ ] code = new String [SIZE];
     boolean userWins = false;
+    ArrayList <String> done = new ArrayList <String>();
+    Collections.addAll(done,"b","b","b","b");
     
     System.out.println("Welcome to Code Breaker!");
     
@@ -20,12 +22,12 @@ public class CodeBreaker {
       String [] guess = userInput(SIZE);
       //valid(); (use do-while to keep calling if invalid input)
       ArrayList <String> countFullyCorr = findFullyCorrect (code, guess);
-      /*if (user guesses code){
-       * userWins =true;
-       * System.out.println("Congratulations! It took you" +(i+1) +" guess to find the code");
-       * break;
-       * }
-       */ 
+      if (countFullyCorr.equals(done)){
+        userWins =true;
+        System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
+        break;
+      }
+      
       System.out.println(countFullyCorr);
       removeFullyCorrect (code, guess);
       //findColourCorrect (code, guess);
