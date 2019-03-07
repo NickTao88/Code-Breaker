@@ -29,8 +29,8 @@ public class CodeBreaker {
       
       System.out.println(countFullyCorr);
       removeFullyCorrect (code, guess[i]);
-      //findColourCorrect (code, guess);
-      //displayGame();
+      findColourCorrect (code, guess[i]);
+      displayGame(guess);
     }
     if (userWins = false) {
       System.out.print("I'm sorry, you lose. The correct code was ");
@@ -46,7 +46,6 @@ public class CodeBreaker {
     
     for (int j = 0; j < guess[count].length; j++) {
       System.out.println("Please enter your guess of length " +size +" using the letters [G,R,B,Y,O,P]");
-      //String temp = sc.nextLine
       guess[count][j] = sc.nextLine();
     }
     isValid = valid (guess[count], colour, size );
@@ -55,8 +54,6 @@ public class CodeBreaker {
       System.err.println("Invalid Input! Try Again!");
       userInput (size, TRIES, count, colour);
     }
-    
-    //valid(guess);
     return guess;
   }
   
@@ -82,8 +79,8 @@ public class CodeBreaker {
     Random ran = new Random ();
     
     for (int i = 0; i < size; i++) {
-      int temp = ran.nextInt(size-1);
-      char c = colours.charAt(temp);
+      int num = ran.nextInt(size-1);
+      char c = colours.charAt(num);
       String s = String.valueOf(c);
       code [i] = s;
     }
@@ -102,44 +99,50 @@ public class CodeBreaker {
   }
   
   public static ArrayList <String> removeFullyCorrect (String [] code, String [] guess) {
-    ArrayList <String> fullyCorrect = new ArrayList <String> ();
-    fullyCorrect.clear();
+    ArrayList <String> remFullyCorr = new ArrayList <String> ();
+    remFullyCorr.clear();
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
-        fullyCorrect.add(guess[i]);
+        remFullyCorr.add(guess[i]);
       }
     }
-    return fullyCorrect;
+    return remFullyCorr;
   }
   
   
-  
-  public static boolean valid(ArrayList<String> userInput, String colour, int size) {
-    boolean lengthValid = false;
-    if (userInput.size() == size) {
-      lengthValid = true;
-    }
-    boolean colourValid = true;
-    for (int i=0; i<userInput.size(); i++) {
-      if (!colour.contains(userInput.get(i))) {
-        colourValid = false;
-      }
-    }
-    if (lengthValid == true && colourValid == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
-  public static ArrayList<String> duplicates(ArrayList<String> userInput) {
-    for (int i=0; i<userInput.size(); i++) {
-      for (int j=0; j<userInput.size(); j++) {
-        if (userInput.get(i).equals(userInput.get(j))) {
-          userInput.remove(i);
+  public static String[] findColourCorrect(String[] code, String[] userInput) { //change input for only 
+    String[] codeCopy = code.clone();
+    String[] colourCorrect = new String[code.length]; 
+    for (int i=0; i<userInput.length; i++) {
+      for (int j=0; j<code.length; j++) {
+        if (userInput[i].equals(codeCopy[j])) {
+          colourCorrect[i] = "w";
+          codeCopy[j] = null;
+          break;
         }
       }
     }
-    return userInput; 
-  } 
+    return colourCorrect;
+  }
+  
+  public static void displayGame(String[][] board, String[][] piecesCorrect) {
+    System.out.println("Guess\tClues");
+    
+      System.out.println("****************");
+    
+    
+    for (int i=0; i<board.length; i++) {
+      for (int j=0; j<board[i].length; j++) {
+        System.out.print(board[i][j] + " ");
+      }
+      System.out.print("    ");
+      for (int k=0; k<piecesCorrect[i].length; k++) {
+        if (piecesCorrect[i][k] != null) {
+          System.out.print(piecesCorrect[i][k] + " ");
+        }
+        
+      }
+      System.out.println();
+    }
+  }
 }
