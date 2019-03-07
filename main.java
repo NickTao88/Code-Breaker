@@ -1,111 +1,156 @@
-import java.util.Scanner;
-import java.util.Random;
-
+/*
+ * Name: Nicholas Tao and Rohan Ravindran
+ * Date: March 4, 2019
+ * Assignment Name: Code Breaker
+ */
+import java.util.*;
 public class main {
-	
-	static final int SIZE = 4;
-	  static final int TRIES = 10;
-	  static String clues [][] = new String [TRIES][SIZE];
-	
-	public static void main(String args[]) {
-		
-	}
-	
-	public static String[][] findColourCorrect(String[] code, String[] userInput, int global) { //change input for only 
-		String[] codeCopy = code.clone(); //test without clone
-		String[] colourCorrect = new String[code.length]; //har
-		int countClues = 0;
+  static final int SIZE = 4;
+  static final int TRIES = 10;
+  static String clues [][] = new String [TRIES][SIZE]; 
+  static int countClues=0;
+  static int countTries = 0;
+  
+  
+  public static void main(String [] args) {
+    final String VALID_CHARS = "GRBYOP";
+    String [ ] code = new String [SIZE];
+    boolean userWins = false;
+    
+    System.out.println("Welcome to Code Breaker!");
+    
+    createCode(VALID_CHARS, SIZE, code);
+    String [][] guess = new String [TRIES][SIZE];
+    for (int i = 0; i < TRIES; i++) {
+      countTries++;
+      userInput(SIZE, TRIES, i, VALID_CHARS, guess); 
+      
+      findFullyCorrect (code, guess[i], i);
+      for (int a = 0; a < SIZE; a++) {
+        if (clues[i][a] == "b") {
+          userWins = true;
+        } else {
+          userWins = false;
+          break;
+        }
+      }
+      if (userWins==true){
+        System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
+        break;
+      }
+      findColourCorrect(code, removeFullyCorrect (code, guess[i]) , i);
+      
+      displayGame(guess, clues, i);
+    }
+    if (userWins = false) {
+      System.out.print("I'm sorry, you lose. The correct code was ");
+      for (int i = 0; i < code.length;i++) {
+        System.out.print(code[i]);
+      }
+    }
+  }
+  
+  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
 		for (int i=0; i<userInput.length; i++) {
-			for (int j=0; j<code.length; j++) {
-				if (userInput[i].equals(codeCopy[j])) {
-					clues[global][countClues] = "w";
-					codeCopy[j] = null;
-					countClues++;
-					break;
-				}
+			if (Arrays.stream(code).anyMatch(userInput[i]::equals)) {
+				clues[count][countClues] = "w";
+				countClues++;
 			}
 		}
+		countClues = 0;
 		return clues;
-	}
-	
-	public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {
-	    int countClues=0;
+	  }
+  
+  public static String[][] userInput (int size, int TRIES, int count, String colour, String [][]guess) {
+    Scanner sc = new Scanner (System.in);
+    
+    boolean isValid;
+    for (int j = 0; j < guess[count].length; j++) {
+      System.out.println("Please enter your guess of length " +size +" using the letters [G,R,B,Y,O,P]");
+      guess[count][j] = sc.nextLine();
+    }
+    isValid = valid (guess[count], colour, size );
+    
+    if (isValid==false) {
+      System.err.println("Invalid Input! Try Again!");
+      userInput (size, TRIES, count, colour, guess);
+    }
+    return guess;
+  }
+  
+  public static boolean valid(String[] userInput, String colour, int size) {
+    boolean lengthValid = false;
+    if (userInput.length == size) {
+      lengthValid = true;
+    }
+    boolean colourValid = true;
+    for (int i=0; i<userInput.length; i++) {
+      if (!colour.contains(userInput[i])) {
+        colourValid = false;
+      }
+    }
+    if (lengthValid == true && colourValid == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  public static String[] createCode (String colours, int size, String[] code) {
+    Random ran = new Random ();
+    
+    for (int i = 0; i < size; i++) {
+      int num = ran.nextInt(size-1);
+      char c = colours.charAt(num);
+      String s = String.valueOf(c);
+      code [i] = s;
+    }
+    for (int i = 0; i < code.length; i++) {
+      System.out.println(code[i]); //temporary
+    }
+    return code; 
+  }
+  
+  public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {   
+    for (int j = 0; j < code.length; j++) {
+      if (code[j].equals(guess[j])) {
+        clues[i][countClues]="b";
+        countClues++;
+      }
+    }
+    return clues;
+  }
+  
+  public static String[] removeFullyCorrect (String [] code, String [] guess) { //fix
+    int temp = 0;
+    String [] remFullyCorr = new String [code.length - countClues];
+    for (int i = 0; i < code.length; i++) {
+      if (!code[i].equals(guess[i])) {
+        remFullyCorr[temp] = guess[i];
+        temp++;
+      }
+    }
+    return remFullyCorr;
+  }
 
-	    for (int j = 0; j < code.length; j++) {
-	      if (code[j].equals(guess[j])) {
-	        countClues++;
-	        clues[i][countClues]="b";
-	      }
-	    }
-	    return clues;
-	  }
-	
-	
-	public static String[] createCode (String colours, int size, String[] code) {
-	    Random ran = new Random ();
-	    
-	    for (int i = 0; i < size; i++) {
-	      int num = ran.nextInt(size-1);
-	      char c = colours.charAt(num);
-	      String s = String.valueOf(c);
-	      code [i] = s;
-	    }
-	    return code; 
-	  }
-	
-	public static String[][] userInput (int size, int TRIES, int count, String colour) {
-	    Scanner sc = new Scanner (System.in);
-	    String guess [][] = new String [TRIES][size];
-	    boolean isValid;
-	    
-	    for (int j = 0; j < guess[count].length; j++) {
-	      System.out.println("Please enter your guess of length " +size +" using the letters [G,R,B,Y,O,P]");
-	      guess[count][j] = sc.nextLine();
-	    }
-	    isValid = valid (guess[count], colour, size );
-	    
-	    if (isValid==false) {
-	      System.err.println("Invalid Input! Try Again!");
-	      userInput (size, TRIES, count, colour);
-	    }
-	    return guess;
-	  }
-	
-	public static boolean valid(String[] userInput, String colour, int size) {
-		boolean colourValid = true;
-		for (int i=0; i<userInput.length; i++) {
-			if (colour.indexOf(userInput[i]) < 0) {
-				colourValid = false;
-				break;
-			}
-		}
-		if (userInput.length == size && colourValid == true) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public static void displayGame(String[][] board, String[][] piecesCorrect) {
-		System.out.println("Guess	   Clues");
-		for (int i=0; i<16; i++) {
-			System.out.print("*");
-		}
-		System.out.println();
-		
-		for (int i=0; i<board.length; i++) {
-			for (int j=0; j<board[i].length; j++) {
-				System.out.print(board[i][j] + " ");
-			}
-			System.out.print("	   ");
-			for (int k=0; k<piecesCorrect[i].length; k++) {
-				if (piecesCorrect[i][k] != null) {
-					System.out.print(piecesCorrect[i][k] + " ");
-				}
-				
-			}
-			System.out.println();
-		}
-	}
-		
+  
+  public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
+    System.out.println("Guess\tClues");
+    
+    System.out.println("****************");
+    
+    for (int i=0; i<(count+1); i++) {
+      for (int j=0; j<board[i].length; j++) {
+        System.out.print(board[i][j] + " ");
+      }
+      System.out.print("    ");
+      for (int k=0; k<piecesCorrect[i].length; k++) {
+        if (piecesCorrect[i][k] != null) {
+          System.out.print(piecesCorrect[i][k] + " ");
+        }
+        
+      }
+      System.out.println();
+    }
+  }
 }
