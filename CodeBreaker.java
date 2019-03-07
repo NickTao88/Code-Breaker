@@ -8,6 +8,7 @@ public class CodeBreaker2 {
   static final int SIZE = 4;
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; ////NEED TO STORE CLUES HERE --> HOW?
+  static int countClues=0;
   public static void main (String [] args) {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
@@ -32,9 +33,7 @@ public class CodeBreaker2 {
         break;
       }
       
-      
-      removeFullyCorrect (code, guess[i]);
-      findColourCorrect (code, guess[i], i);
+      findColourCorrect (code,removeFullyCorrect (code, guess[i]) , i);
       displayGame(guess, clues, i);
     }
     if (userWins = false) {
@@ -95,24 +94,23 @@ public class CodeBreaker2 {
     return code; 
   }
   
-  public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {
-    int countClues=0;
-    
+  public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {   
     for (int j = 0; j < code.length; j++) {
       if (code[j].equals(guess[j])) {
-        countClues++;
         clues[i][countClues]="b";
+        countClues++;
       }
     }
     return clues;
   }
   
-  public static ArrayList<String> removeFullyCorrect (String [] code, String [] guess) {
-    ArrayList <String> remFullyCorr = new ArrayList <String> ();
-    remFullyCorr.clear();
+  public static String[] removeFullyCorrect (String [] code, String [] guess) {
+    int temp = 0;
+   String [] remFullyCorr = new String [code.length];
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
-        remFullyCorr.add(guess[i]);
+        temp++;
+        remFullyCorr[temp-1] = guess[i];
       }
     }
     return remFullyCorr;
@@ -120,21 +118,22 @@ public class CodeBreaker2 {
   
   
   public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
-    String[] codeCopy = code.clone(); //test without clone
-    String[] colourCorrect = new String[code.length]; //har
-    int countClues = 0;
+    //String[] codeCopy = code.clone(); //test without clone
+    String[] colourCorrect = new String[code.length]; 
     for (int i=0; i<userInput.length; i++) {
       for (int j=0; j<code.length; j++) {
-        if (userInput[i].equals(codeCopy[j])) {
+        if (userInput[i].equals(code[j])) {
           clues[count][countClues] = "w";
-          codeCopy[j] = null;
+          //code[j] = null;
           countClues++;
           break;
         }
       }
     }
+    countClues=0;
     return clues;
   }
+  
   public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
     System.out.println("Guess\tClues");
     
