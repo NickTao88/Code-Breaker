@@ -4,12 +4,12 @@
  * Assignment Name: Code Breaker
  */
 import java.util.*;
-public class CodeBreaker {
-  
+public class CodeBreaker2 {
+  static final int SIZE = 4;
+  static final int TRIES = 10;
+  static String clues [][] = new String [TRIES][SIZE]; ////NEED TO STORE CLUES HERE --> HOW?
   public static void main (String [] args) {
-    final int SIZE = 4;
     final String VALID_CHARS = "GRBYOP";
-    final int TRIES = 10;
     String [ ] code = new String [SIZE];
     boolean userWins = false;
     ArrayList <String> done = new ArrayList <String>();
@@ -20,17 +20,24 @@ public class CodeBreaker {
     createCode(VALID_CHARS, SIZE, code);
     for (int i = 0; i < TRIES; i++) {
       String [][] guess = userInput(SIZE, TRIES, i, VALID_CHARS); 
-      ArrayList <String> countFullyCorr = findFullyCorrect (code, guess[i]);
-      if (countFullyCorr.equals(done)){
-        userWins =true;
+      findFullyCorrect (code, guess[i], i);
+      for (int a = 0; a < SIZE; a++) {
+        if (clues[i][a] == "b") {
+          userWins = true;
+        } else {
+          userWins = false;
+          break;
+        }
+      }
+      if (userWins==true){
         System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
         break;
       }
       
-      System.out.println(countFullyCorr);
+
       removeFullyCorrect (code, guess[i]);
       findColourCorrect (code, guess[i]);
-      displayGame(guess);
+      displayGame(guess, clues, i);
     }
     if (userWins = false) {
       System.out.print("I'm sorry, you lose. The correct code was ");
@@ -87,18 +94,19 @@ public class CodeBreaker {
     return code; 
   }
   
-  public static ArrayList <String> findFullyCorrect (String [] code, String [] guess) {
-    ArrayList <String> countFullyCorr = new ArrayList <String> ();
-    countFullyCorr.clear();
-    for (int i = 0; i < code.length; i++) {
-      if (code[i].equals(guess[i])) {
-        countFullyCorr.add("b");
+  public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {
+    int countClues=0;
+
+    for (int j = 0; j < code.length; j++) {
+      if (code[j].equals(guess[j])) {
+        countClues++;
+        clues[i][countClues]="b";
       }
     }
-    return countFullyCorr;
+    return clues;
   }
   
-  public static ArrayList <String> removeFullyCorrect (String [] code, String [] guess) {
+  public static ArrayList<String> removeFullyCorrect (String [] code, String [] guess) {
     ArrayList <String> remFullyCorr = new ArrayList <String> ();
     remFullyCorr.clear();
     for (int i = 0; i < code.length; i++) {
@@ -125,13 +133,13 @@ public class CodeBreaker {
     return colourCorrect;
   }
   
-  public static void displayGame(String[][] board, String[][] piecesCorrect) {
+  public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
     System.out.println("Guess\tClues");
     
-      System.out.println("****************");
+    System.out.println("****************");
     
     
-    for (int i=0; i<board.length; i++) {
+    for (int i=0; i<(count+1); i++) {
       for (int j=0; j<board[i].length; j++) {
         System.out.print(board[i][j] + " ");
       }
