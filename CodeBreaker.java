@@ -9,6 +9,7 @@ public class CodeBreaker2 {
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; ////NEED TO STORE CLUES HERE --> HOW?
   static int countClues=0;
+  static int countTries = 0;
   public static void main (String [] args) {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
@@ -17,8 +18,11 @@ public class CodeBreaker2 {
     System.out.println("Welcome to Code Breaker!");
     
     createCode(VALID_CHARS, SIZE, code);
+    String [][] guess = new String [TRIES][SIZE];
     for (int i = 0; i < TRIES; i++) {
-      String [][] guess = userInput(SIZE, TRIES, i, VALID_CHARS); 
+      countTries++;
+      userInput(SIZE, TRIES, i, VALID_CHARS, guess); 
+      
       findFullyCorrect (code, guess[i], i);
       for (int a = 0; a < SIZE; a++) {
         if (clues[i][a] == "b") {
@@ -33,7 +37,10 @@ public class CodeBreaker2 {
         break;
       }
       
-      findColourCorrect (code,removeFullyCorrect (code, guess[i]) , i);
+      findColourCorrect (code,removeFullyCorrect (code, guess[i]) , countTries);
+      
+      
+      
       displayGame(guess, clues, i);
     }
     if (userWins = false) {
@@ -43,11 +50,10 @@ public class CodeBreaker2 {
       }
     }
   }
-  public static String[][] userInput (int size, int TRIES, int count, String colour) {
+  public static String[][] userInput (int size, int TRIES, int count, String colour, String [][]guess) {
     Scanner sc = new Scanner (System.in);
-    String guess [][] = new String [TRIES][size];
-    boolean isValid;
     
+    boolean isValid;
     for (int j = 0; j < guess[count].length; j++) {
       System.out.println("Please enter your guess of length " +size +" using the letters [G,R,B,Y,O,P]");
       guess[count][j] = sc.nextLine();
@@ -56,8 +62,9 @@ public class CodeBreaker2 {
     
     if (isValid==false) {
       System.err.println("Invalid Input! Try Again!");
-      userInput (size, TRIES, count, colour);
+      userInput (size, TRIES, count, colour, guess);
     }
+    
     return guess;
   }
   
@@ -89,7 +96,7 @@ public class CodeBreaker2 {
       code [i] = s;
     }
     for (int i = 0; i < code.length; i++) {
-    System.out.println(code[i]); //temporary
+      System.out.println(code[i]); //temporary
     }
     return code; 
   }
@@ -106,7 +113,7 @@ public class CodeBreaker2 {
   
   public static String[] removeFullyCorrect (String [] code, String [] guess) {
     int temp = 0;
-   String [] remFullyCorr = new String [code.length];
+    String [] remFullyCorr = new String [code.length-countClues];
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
         temp++;
@@ -117,12 +124,10 @@ public class CodeBreaker2 {
   }
   
   
-  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
-    //String[] codeCopy = code.clone(); //test without clone
-    String[] colourCorrect = new String[code.length]; 
-    for (int i=0; i<userInput.length; i++) {
-      for (int j=0; j<code.length; j++) {
-        if (userInput[i].equals(code[j])) {
+  public static String[][] findColourCorrect(String[] code, String[] remFullyCorr, int count) { //change input for only 
+    for (int i=0; i < remFullyCorr.length; i++) {
+      for (int j=0; j < code.length; j++) {
+        if (remFullyCorr[i].equals(code[j])) {
           clues[count][countClues] = "w";
           //code[j] = null;
           countClues++;
