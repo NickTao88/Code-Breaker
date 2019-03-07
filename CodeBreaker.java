@@ -3,11 +3,12 @@
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
  */
+//FIND COLOUR CORRECT IS BROKEN
 import java.util.*;
 public class CodeBreaker2 {
   static final int SIZE = 4;
   static final int TRIES = 10;
-  static String clues [][] = new String [TRIES][SIZE]; ////NEED TO STORE CLUES HERE --> HOW?
+  static String clues [][] = new String [TRIES][SIZE]; 
   static int countClues=0;
   static int countTries = 0;
   public static void main (String [] args) {
@@ -124,7 +125,7 @@ public class CodeBreaker2 {
   }
   
   
-  public static String[][] findColourCorrect(String[] code, String[] remFullyCorr, int count) { //change input for only 
+  public static String[][] findColourCorrect(String[] code, String[] remFullyCorr, int count) { //THIS METHOD BROKEN
     for (int i=0; i < remFullyCorr.length; i++) {
       for (int j=0; j < code.length; j++) {
         if (remFullyCorr[i].equals(code[j])) {
@@ -153,7 +154,6 @@ public class CodeBreaker2 {
         if (piecesCorrect[i][k] != null) {
           System.out.print(piecesCorrect[i][k] + " ");
         }
-        
       }
       System.out.println();
     }
