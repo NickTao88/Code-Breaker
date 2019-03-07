@@ -12,8 +12,6 @@ public class CodeBreaker2 {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
     boolean userWins = false;
-    ArrayList <String> done = new ArrayList <String>();
-    Collections.addAll(done,"b","b","b","b");
     
     System.out.println("Welcome to Code Breaker!");
     
@@ -34,9 +32,9 @@ public class CodeBreaker2 {
         break;
       }
       
-
+      
       removeFullyCorrect (code, guess[i]);
-      findColourCorrect (code, guess[i]);
+      findColourCorrect (code, guess[i], i);
       displayGame(guess, clues, i);
     }
     if (userWins = false) {
@@ -91,12 +89,15 @@ public class CodeBreaker2 {
       String s = String.valueOf(c);
       code [i] = s;
     }
+    for (int i = 0; i < code.length; i++) {
+    System.out.println(code[i]); //temporary
+    }
     return code; 
   }
   
   public static String[][] findFullyCorrect (String [] code, String [] guess, int i) {
     int countClues=0;
-
+    
     for (int j = 0; j < code.length; j++) {
       if (code[j].equals(guess[j])) {
         countClues++;
@@ -118,26 +119,26 @@ public class CodeBreaker2 {
   }
   
   
-  public static String[] findColourCorrect(String[] code, String[] userInput) { //change input for only 
-    String[] codeCopy = code.clone();
-    String[] colourCorrect = new String[code.length]; 
+  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
+    String[] codeCopy = code.clone(); //test without clone
+    String[] colourCorrect = new String[code.length]; //har
+    int countClues = 0;
     for (int i=0; i<userInput.length; i++) {
       for (int j=0; j<code.length; j++) {
         if (userInput[i].equals(codeCopy[j])) {
-          colourCorrect[i] = "w";
+          clues[count][countClues] = "w";
           codeCopy[j] = null;
+          countClues++;
           break;
         }
       }
     }
-    return colourCorrect;
+    return clues;
   }
-  
   public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
     System.out.println("Guess\tClues");
     
     System.out.println("****************");
-    
     
     for (int i=0; i<(count+1); i++) {
       for (int j=0; j<board[i].length; j++) {
