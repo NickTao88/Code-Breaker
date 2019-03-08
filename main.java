@@ -2,6 +2,10 @@
  * Name: Nicholas Tao and Rohan Ravindran
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
+ * QUESTION FOR MR A: If invalid input, they re-enter ALL input? ie input:"BBBA" --> need to reenter all, not just the A?
+ * another question: is user input supposed to all be in one line?
+ * TO DO:
+ * need 2 arraylists (one is code after removing fullyCorr and one is guess after removing fullyCorr), then compare the two lists!
  */
 import java.util.*;
 public class main {
@@ -10,14 +14,17 @@ public class main {
   static String clues [][] = new String [TRIES][SIZE]; 
   static int countClues=0;
   static int countTries = 0;
+  static Scanner sc = new Scanner (System.in);
   
   
-  public static void main(String [] args) {
+  public static void main(String[] args) {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
     boolean userWins = false;
     
-    System.out.println("Welcome to Code Breaker!");
+    System.out.println("Welcome to Code Breaker! Enter your name");
+    //String name = sc.nextLine();
+    //System.out.println("Hey " +name +"! Let's get started!");
     
     createCode(VALID_CHARS, SIZE, code);
     String [][] guess = new String [TRIES][SIZE];
@@ -51,9 +58,11 @@ public class main {
   }
   
   public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
-		for (int i=0; i<userInput.length; i++) {
-			if (Arrays.stream(code).anyMatch(userInput[i]::equals)) {
+	  String[] userInputClone = userInput;
+		for (int i=0; i<userInputClone.length; i++) {
+			if (Arrays.stream(code).anyMatch(userInputClone[i]::equals)) {
 				clues[count][countClues] = "w";
+				userInputClone[i] = "";
 				countClues++;
 			}
 		}
@@ -80,15 +89,18 @@ public class main {
   
   public static boolean valid(String[] userInput, String colour, int size) {
     boolean lengthValid = false;
-    if (userInput.length == size) {
+    if (userInput.length == size) { //hold up this will always return true no matter what since it'd hardcoded (the size of 2d array)
       lengthValid = true;
     }
+    
     boolean colourValid = true;
     for (int i=0; i<userInput.length; i++) {
-      if (!colour.contains(userInput[i])) {
+      if (!colour.contains(userInput[i]) || userInput[i].equals("")) {
         colourValid = false;
+        break;
       }
-    }
+      }
+    
     if (lengthValid == true && colourValid == true) {
       return true;
     } else {
@@ -105,9 +117,11 @@ public class main {
       String s = String.valueOf(c);
       code [i] = s;
     }
+    System.out.print("Code: "); //temporary
     for (int i = 0; i < code.length; i++) {
-      System.out.println(code[i]); //temporary
+      System.out.print(code[i]); //temporary
     }
+    System.out.println(""); //temporary
     return code; 
   }
   
@@ -130,9 +144,11 @@ public class main {
         temp++;
       }
     }
+    
+    System.out.println("Remove Fully Correct: " + Arrays.toString(remFullyCorr));
+    
     return remFullyCorr;
   }
-
   
   public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
     System.out.println("Guess\tClues");
