@@ -4,6 +4,8 @@
  * Assignment Name: Code Breaker
  * QUESTION FOR MR A: If invalid input, they re-enter ALL input? ie input:"BBBA" --> need to reenter all, not just the A?
  * another question: is user input supposed to all be in one line?
+ * TO DO:
+ * need 2 arraylists (one is code after removing fullyCorr and one is guess after removing fullyCorr), then compare the two lists!
  */
 import java.util.*;
 public class CodeBreaker3 {
@@ -56,8 +58,10 @@ public class CodeBreaker3 {
   }
   
   public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
+    
+ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
     for (int i=0; i<userInput.length; i++) {
-      if (Arrays.stream(code).anyMatch(userInput[i]::equals)) {
+      if (input.contains(code[i])) {
         clues[count][countClues] = "w";
         countClues++;
       }
@@ -89,15 +93,14 @@ public class CodeBreaker3 {
       lengthValid = true;
     }
     
-    boolean colourValid = false;
+    boolean colourValid = true;
     for (int i=0; i<userInput.length; i++) {
-      if (colour.contains(userInput[i])) {
-        colourValid = true;
-      } else  {
+      if (!colour.contains(userInput[i]) || userInput[i].equals("")) {
         colourValid = false;
         break;
       }
-    }
+      }
+    
     if (lengthValid == true && colourValid == true) {
       return true;
     } else {
