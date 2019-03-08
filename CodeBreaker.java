@@ -2,21 +2,27 @@
  * Name: Nicholas Tao and Rohan Ravindran
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
+ * QUESTION FOR MR A: If invalid input, they re-enter ALL input? ie input:"BBBA" --> need to reenter all, not just the A?
+ * another question: is user input supposed to all be in one line?
  */
-//FIND COLOUR CORRECT IS BROKEN
 import java.util.*;
-public class CodeBreaker2 {
+public class CodeBreaker3 {
   static final int SIZE = 4;
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; 
   static int countClues=0;
   static int countTries = 0;
-  public static void main (String [] args) {
+  static Scanner sc = new Scanner (System.in);
+  
+  
+  public static void main(String [] args) {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
     boolean userWins = false;
     
-    System.out.println("Welcome to Code Breaker!");
+    System.out.println("Welcome to Code Breaker! Enter your name");
+    //String name = sc.nextLine();
+    //System.out.println("Hey " +name +"! Let's get started!");
     
     createCode(VALID_CHARS, SIZE, code);
     String [][] guess = new String [TRIES][SIZE];
@@ -37,10 +43,7 @@ public class CodeBreaker2 {
         System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
         break;
       }
-      
-      findColourCorrect (code,removeFullyCorrect (code, guess[i]) , countTries);
-      
-      
+      findColourCorrect(code, removeFullyCorrect (code, guess[i]) , i);
       
       displayGame(guess, clues, i);
     }
@@ -51,6 +54,18 @@ public class CodeBreaker2 {
       }
     }
   }
+  
+  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
+    for (int i=0; i<userInput.length; i++) {
+      if (Arrays.stream(code).anyMatch(userInput[i]::equals)) {
+        clues[count][countClues] = "w";
+        countClues++;
+      }
+    }
+    countClues = 0;
+    return clues;
+  }
+  
   public static String[][] userInput (int size, int TRIES, int count, String colour, String [][]guess) {
     Scanner sc = new Scanner (System.in);
     
@@ -65,19 +80,22 @@ public class CodeBreaker2 {
       System.err.println("Invalid Input! Try Again!");
       userInput (size, TRIES, count, colour, guess);
     }
-    
     return guess;
   }
   
   public static boolean valid(String[] userInput, String colour, int size) {
     boolean lengthValid = false;
-    if (userInput.length == size) {
+    if (userInput.length == size) { //hold up this will always return true no matter what since it'd hardcoded (the size of 2d array)
       lengthValid = true;
     }
-    boolean colourValid = true;
+    
+    boolean colourValid = false;
     for (int i=0; i<userInput.length; i++) {
-      if (!colour.contains(userInput[i])) {
+      if (colour.contains(userInput[i])) {
+        colourValid = true;
+      } else  {
         colourValid = false;
+        break;
       }
     }
     if (lengthValid == true && colourValid == true) {
@@ -96,9 +114,11 @@ public class CodeBreaker2 {
       String s = String.valueOf(c);
       code [i] = s;
     }
+    System.out.print("Code: "); //temporary
     for (int i = 0; i < code.length; i++) {
-      System.out.println(code[i]); //temporary
+      System.out.print(code[i]); //temporary
     }
+    System.out.println(""); //temporary
     return code; 
   }
   
@@ -112,32 +132,16 @@ public class CodeBreaker2 {
     return clues;
   }
   
-  public static String[] removeFullyCorrect (String [] code, String [] guess) {
+  public static String[] removeFullyCorrect (String [] code, String [] guess) { //fix
     int temp = 0;
-    String [] remFullyCorr = new String [code.length-countClues];
+    String [] remFullyCorr = new String [code.length - countClues];
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
+        remFullyCorr[temp] = guess[i];
         temp++;
-        remFullyCorr[temp-1] = guess[i];
       }
     }
     return remFullyCorr;
-  }
-  
-  
-  public static String[][] findColourCorrect(String[] code, String[] remFullyCorr, int count) { //THIS METHOD BROKEN
-    for (int i=0; i < remFullyCorr.length; i++) {
-      for (int j=0; j < code.length; j++) {
-        if (remFullyCorr[i].equals(code[j])) {
-          clues[count][countClues] = "w";
-          //code[j] = null;
-          countClues++;
-          break;
-        }
-      }
-    }
-    countClues=0;
-    return clues;
   }
   
   public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
@@ -154,6 +158,7 @@ public class CodeBreaker2 {
         if (piecesCorrect[i][k] != null) {
           System.out.print(piecesCorrect[i][k] + " ");
         }
+        
       }
       System.out.println();
     }
