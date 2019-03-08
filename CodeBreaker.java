@@ -6,16 +6,17 @@
  * another question: is user input supposed to all be in one line?
  * TO DO:
  * need 2 arraylists (one is code after removing fullyCorr and one is guess after removing fullyCorr), then compare the two lists!
+ * to do: take input as a one line string and store in a String array
  */
 import java.util.*;
-public class CodeBreaker3 {
+public class CodeBreaker4 {
   static final int SIZE = 4;
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; 
   static int countClues=0;
   static int countTries = 0;
   static Scanner sc = new Scanner (System.in);
-  
+  static String [] remCode;
   
   public static void main(String [] args) {
     final String VALID_CHARS = "GRBYOP";
@@ -23,10 +24,10 @@ public class CodeBreaker3 {
     boolean userWins = false;
     
     System.out.println("Welcome to Code Breaker! Enter your name");
-    //String name = sc.nextLine();
-    //System.out.println("Hey " +name +"! Let's get started!");
-    
-    createCode(VALID_CHARS, SIZE, code);
+      //String name = sc.nextLine();
+      //System.out.println("Hey " +name +"! Let's get started!");
+      
+      createCode(VALID_CHARS, SIZE, code);
     String [][] guess = new String [TRIES][SIZE];
     for (int i = 0; i < TRIES; i++) {
       countTries++;
@@ -45,7 +46,7 @@ public class CodeBreaker3 {
         System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
         break;
       }
-      findColourCorrect(code, removeFullyCorrect (code, guess[i]) , i);
+      findColourCorrect(remCode, removeFullyCorrect (code, guess[i]) , i);
       
       displayGame(guess, clues, i);
     }
@@ -59,11 +60,13 @@ public class CodeBreaker3 {
   
   public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
     
-ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
-    for (int i=0; i<userInput.length; i++) {
-      if (input.contains(code[i])) {
+    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
+    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
+    for (int i=0; i < userInput.length; i++) {
+      if (input.contains(codeList.get(i))) {
         clues[count][countClues] = "w";
         countClues++;
+        codeList.remove(i);
       }
     }
     countClues = 0;
@@ -99,7 +102,7 @@ ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
         colourValid = false;
         break;
       }
-      }
+    }
     
     if (lengthValid == true && colourValid == true) {
       return true;
@@ -138,11 +141,16 @@ ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
   public static String[] removeFullyCorrect (String [] code, String [] guess) { //fix
     int temp = 0;
     String [] remFullyCorr = new String [code.length - countClues];
+    remCode = new String [remFullyCorr.length];
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
         remFullyCorr[temp] = guess[i];
+        remCode[temp] = code[i];
         temp++;
       }
+    }
+    for (int i = 0; i < remFullyCorr.length; i++) {
+    System.out.println(remFullyCorr[i]);
     }
     return remFullyCorr;
   }
