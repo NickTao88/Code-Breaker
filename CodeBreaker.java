@@ -6,18 +6,19 @@
  * another question: is user input supposed to all be in one line?
  * TO DO:
  * need 2 arraylists (one is code after removing fullyCorr and one is guess after removing fullyCorr), then compare the two lists!
+ * to do: take input as a one line string and store in a String array
  */
 import java.util.*;
-public class main {
+public class CodeBreaker5 {
   static final int SIZE = 4;
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; 
+  static String validGuesses [][] = new String [TRIES][SIZE];
   static int countClues=0;
-  static int countTries = 0;
   static Scanner sc = new Scanner (System.in);
+  static String [] remCode;
   
-  
-  public static void main(String[] args) {
+  public static void main(String [] args) {
     final String VALID_CHARS = "GRBYOP";
     String [ ] code = new String [SIZE];
     boolean userWins = false;
@@ -27,14 +28,32 @@ public class main {
     //System.out.println("Hey " +name +"! Let's get started!");
     
     createCode(VALID_CHARS, SIZE, code);
-    String [][] guess = new String [TRIES][SIZE];
-    for (int i = 0; i < TRIES; i++) {
-      countTries++;
-      userInput(SIZE, TRIES, i, VALID_CHARS, guess); 
+    
+    for (int currTurn = 0; currTurn < TRIES; currTurn++) {
       
-      findFullyCorrect (code, guess[i], i);
+      boolean isValid;
+      System.out.println("Please enter your guess of length " +SIZE +" using the letters [G,R,B,Y,O,P]");
+      String guessStr = sc.nextLine();
+      
+      String[] guess = new String[guessStr.length()];
+      
+      for (int i = 0; i < guessStr.length(); i++) {
+        guess[i] = Character.toString(guessStr.charAt(i));
+      }
+      
+      isValid = valid (guess, VALID_CHARS, SIZE);
+      if (isValid==false) {
+        System.err.println("Invalid Input! Try Again!");
+        currTurn--;
+        continue;
+      } 
+      for (int i = 0; i < guess.length;i++) {
+        validGuesses[currTurn][i] = guess[i];
+      }
+      
+      findFullyCorrect (code, guess, currTurn);
       for (int a = 0; a < SIZE; a++) {
-        if (clues[i][a] == "b") {
+        if (clues[currTurn][a] == "b") {
           userWins = true;
         } else {
           userWins = false;
@@ -42,12 +61,12 @@ public class main {
         }
       }
       if (userWins==true){
-        System.out.println("Congratulations! It took you " +(i+1) +" guess to find the code");
+        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
         break;
       }
-      findColourCorrect(code, removeFullyCorrect (code, guess[i]) , i);
+      findColourCorrect(remCode, removeFullyCorrect (code, guess) , currTurn);
       
-      displayGame(guess, clues, i);
+      displayGame(validGuesses, clues, currTurn);
     }
     if (userWins = false) {
       System.out.print("I'm sorry, you lose. The correct code was ");
@@ -57,41 +76,24 @@ public class main {
     }
   }
   
-  public static String[] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
-	  List<String> characters = new ArrayList();
-	  Set<String> charactersCheck = new HashSet<>();
-	  Set<String> input = new HashSet<>(Arrays.asList(userInput));
-	  
-	  for (int i=0; i<code.length; i++) {
-		  if (!charactersCheck.contains(code[i]) && input.contains(code[i]) && !code[i].equals(userInput[i])) {
-			  clues[count][countClues] = "w";
-			  charactersCheck.add(code[i]);
-		  }
-	  }
-		countClues = 0;
-		return characters.toArray(new String[0]);
-	  }
-  
-  public static String[][] userInput (int size, int TRIES, int count, String colour, String [][]guess) {
-    Scanner sc = new Scanner (System.in);
+  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
     
-    boolean isValid;
-    for (int j = 0; j < guess[count].length; j++) {
-      System.out.println("Please enter your guess of length " +size +" using the letters [G,R,B,Y,O,P]");
-      guess[count][j] = sc.nextLine();
+    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
+    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
+    for (int i=0; i < userInput.length; i++) {
+      if (input.contains(codeList.get(i))) {
+        clues[count][countClues] = "w";
+        countClues++;
+        codeList.remove(i);
+      }
     }
-    isValid = valid (guess[count], colour, size );
-    
-    if (isValid==false) {
-      System.err.println("Invalid Input! Try Again!");
-      userInput (size, TRIES, count, colour, guess);
-    }
-    return guess;
+    countClues = 0;
+    return clues;
   }
   
-  public static boolean valid(String[] userInput, String colour, int size) {
+  public static boolean valid(String []userInput, String colour, int size) {
     boolean lengthValid = false;
-    if (userInput.length == size) { //hold up this will always return true no matter what since it'd hardcoded (the size of 2d array)
+    if (userInput.length == size) {
       lengthValid = true;
     }
     
@@ -101,7 +103,7 @@ public class main {
         colourValid = false;
         break;
       }
-      }
+    }
     
     if (lengthValid == true && colourValid == true) {
       return true;
@@ -140,15 +142,17 @@ public class main {
   public static String[] removeFullyCorrect (String [] code, String [] guess) { //fix
     int temp = 0;
     String [] remFullyCorr = new String [code.length - countClues];
+    remCode = new String [remFullyCorr.length];
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
         remFullyCorr[temp] = guess[i];
+        remCode[temp] = code[i];
         temp++;
       }
     }
-    
-    System.out.println("Remove Fully Correct: " + Arrays.toString(remFullyCorr));
-    
+    for (int i = 0; i < remFullyCorr.length; i++) {
+      System.out.println(remFullyCorr[i]);
+    }
     return remFullyCorr;
   }
   
