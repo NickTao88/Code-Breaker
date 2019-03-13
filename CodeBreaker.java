@@ -3,7 +3,6 @@
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
  * QUESTION FOR MR A: If invalid input, they re-enter ALL input? ie input:"BBBA" --> need to reenter all, not just the A?
- * another question: is user input supposed to all be in one line?
  * TO DO:
  * need 2 arraylists (one is code after removing fullyCorr and one is guess after removing fullyCorr), then compare the two lists!
  * to do: take input as a one line string and store in a String array
@@ -71,11 +70,12 @@ public class CodeBreaker5 {
       
       displayGame(validGuesses, clues, currTurn);
     }
-    if (userWins = false) {
-      System.out.print("I'm sorry, you lose. The correct code was ");
-      for (int i = 0; i < code.length;i++) {
-        System.out.print(code[i]);
-      }
+    if (userWins==false) {
+    System.out.print("I'm sorry, you lose. The correct code was ");
+    for (int i = 0; i < code.length;i++) {
+      System.out.print(code[i]);
+    }
+    System.out.println("");
     }
   }
   
@@ -146,7 +146,7 @@ public class CodeBreaker5 {
   public static String[][] findColourCorrect(String[] code, String[] userInput, int count) {
     ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
     ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
-    for (int i=0; i < userInput.length; i++) {
+    for (int i=0; i < codeList.size(); i++) {
       if (input.contains(codeList.get(i))) {
         clues[count][countClues] = "w";
         countClues++;
