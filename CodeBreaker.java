@@ -97,7 +97,7 @@ public class CodeBreaker5 {
   }
 /**
  * Returns an array of randomly generated characters (representing colours), 
- * from a String of colours
+ * from a String of colours.
  *
  * @param colours possible colours to generate a code from
  * @param size length of code
@@ -123,7 +123,7 @@ public class CodeBreaker5 {
   
 /**
  * Returns true if guess is valid or
- * false if guess is invalid
+ * false if guess is invalid.
  *
  * @param userInput the guess from the user
  * @param colour possible colours
@@ -152,8 +152,15 @@ public class CodeBreaker5 {
       return false;
     }
   }
-  
-  
+/**
+ * Returns an array containing a "b" for every correctly
+ * positioned colour in the guess.
+ *
+ * @param code the randomly generated code
+ * @param guess the user's guess
+ * @return a list containing a "b" for every correctly
+ * positioned colour in the guess
+ */
   public static String[][] findFullyCorrect (String [] code, String [] guess) {   
     for (int j = 0; j < code.length; j++) {
       if (code[j].equals(guess[j])) {
@@ -163,7 +170,17 @@ public class CodeBreaker5 {
     }
     return clues;
   }
-  
+/**
+ * Returns an array that is the result of removing
+ * from the first array all chars that are the same 
+ * and in the same position in the second array.
+ *
+ * @param code the randomly generated code
+ * @param guess the user's guess
+ * @return an array that is the result of removing
+ * from the first array all chars that are the same 
+ * and in the same position in the second array
+ */
   public static String[] removeFullyCorrect (String [] code, String [] guess) { 
     int temp = 0;
     String [] remFullyCorr = new String [code.length - countClues];
@@ -178,7 +195,19 @@ public class CodeBreaker5 {
     
     return remFullyCorr;
   }
-  
+/**
+ * Returns an array containing a "w" for every String in the
+ * second array that has the same value as the String in the
+ * first array but different position.
+ * 
+ * @param code the randomly generated code after fully 
+ * correct elements are removed
+ * @param userInput the user's guess after fully correct 
+ * elements are removed
+ * @return an array that is the result of removing
+ * from the first array all chars that are the same 
+ * and in the same position in the second array
+ */ 
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
     ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
     ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
@@ -192,6 +221,12 @@ public class CodeBreaker5 {
     countClues = 0;
     return clues;
   }
+/**
+ * Displays.
+ * 
+ * @param board [temp]
+ * @param piecesCorrect [temp]
+ */   
   
   public static void displayGame(String[][] board, String[][] piecesCorrect) {
     System.out.println("Guess        Clues");
