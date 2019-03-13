@@ -179,7 +179,6 @@ public class CodeBreaker5 {
     return remFullyCorr;
   }
   
-  //THIS METHOD BROKEN
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
     ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
     ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
