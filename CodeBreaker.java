@@ -64,7 +64,10 @@ public class CodeBreaker5 {
         System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
         break;
       }
-      findColourCorrect(remCode, removeFullyCorrect (code, guess) , currTurn);
+      String [] remFuCor = removeFullyCorrect (code, guess);
+      
+      
+      findColourCorrect(remCode, remFuCor , currTurn);
       
       displayGame(validGuesses, clues, currTurn);
     }
@@ -74,21 +77,6 @@ public class CodeBreaker5 {
         System.out.print(code[i]);
       }
     }
-  }
-  
-  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) { //change input for only 
-    
-    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
-    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
-    for (int i=0; i < userInput.length; i++) {
-      if (input.contains(codeList.get(i))) {
-        clues[count][countClues] = "w";
-        countClues++;
-        codeList.remove(i);
-      }
-    }
-    countClues = 0;
-    return clues;
   }
   
   public static boolean valid(String []userInput, String colour, int size) {
@@ -146,18 +134,31 @@ public class CodeBreaker5 {
     for (int i = 0; i < code.length; i++) {
       if (!code[i].equals(guess[i])) {
         remFullyCorr[temp] = guess[i];
-        remCode[temp] = code[i];
+        remCode[temp] = code[i]; //INITIALIZED REMCODE HERE BUT STILL ENDS UP BEING NULL?
         temp++;
       }
     }
-    for (int i = 0; i < remFullyCorr.length; i++) {
-      System.out.println(remFullyCorr[i]);
-    }
+    
     return remFullyCorr;
   }
   
+  //THIS METHOD BROKEN
+  public static String[][] findColourCorrect(String[] code, String[] userInput, int count) {
+    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
+    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
+    for (int i=0; i < userInput.length; i++) {
+      if (input.contains(codeList.get(i))) {
+        clues[count][countClues] = "w";
+        countClues++;
+        codeList.remove(i);
+      }
+    }
+    countClues = 0;
+    return clues;
+  }
+  
   public static void displayGame(String[][] board, String[][] piecesCorrect, int count) {
-    System.out.println("Guess\tClues");
+    System.out.println("Guess        Clues");
     
     System.out.println("****************");
     
@@ -165,7 +166,7 @@ public class CodeBreaker5 {
       for (int j=0; j<board[i].length; j++) {
         System.out.print(board[i][j] + " ");
       }
-      System.out.print("    ");
+      System.out.print("\t");
       for (int k=0; k<piecesCorrect[i].length; k++) {
         if (piecesCorrect[i][k] != null) {
           System.out.print(piecesCorrect[i][k] + " ");
