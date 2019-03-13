@@ -108,10 +108,10 @@ public class CodeBreaker5 {
     Random ran = new Random ();
     String [] code = new String [SIZE];
     for (int i = 0; i < size; i++) {
-      int num = ran.nextInt(size-1);
-      char c = colours.charAt(num);
-      String s = String.valueOf(c);
-      code [i] = s;
+      int num = ran.nextInt(colours.length()-1); //generate a random number from 0 to one less the number of colours
+      char c = colours.charAt(num); //find the character in the colours string at the randomly generated position
+      String s = String.valueOf(c); //convert the character to a String
+      code [i] = s; //store String in code array
     }
     System.out.print("Code: "); //temporary
     for (int i = 0; i < code.length; i++) {
@@ -133,23 +133,26 @@ public class CodeBreaker5 {
  */
   
   public static boolean valid(String [] userInput, String colour, int size) {
-    boolean lengthValid = false;
+    boolean lengthValid = false; 
+    
+    //if user's guess is the correct length, the length is valid
     if (userInput.length == size) {
       lengthValid = true;
     }
     
     boolean colourValid = true;
     for (int i=0; i<userInput.length; i++) {
+      //check if the valid colours contain the user's guess and if the user's input is blank
       if (!colour.contains(userInput[i]) || userInput[i].equals("")) {
         colourValid = false;
-        break;
+        break; //if one element is invalid, the whole guess is invalid, so program stops checking
       }
     }
     
     if (lengthValid == true && colourValid == true) {
-      return true;
+      return true; //returns true if length and colours are valid
     } else {
-      return false;
+      return false; //return false if both criteria are not met
     }
   }
 /**
@@ -161,11 +164,12 @@ public class CodeBreaker5 {
  * @return a list containing a "b" for every correctly
  * positioned colour in the guess
  */
-  public static String[][] findFullyCorrect (String [] code, String [] guess) {   
+  public static String[][] findFullyCorrect (String [] code, String [] guess) {  
+    
     for (int j = 0; j < code.length; j++) {
-      if (code[j].equals(guess[j])) {
-        clues[countCurrTurn][countClues]="b";
-        countClues++;
+      if (code[j].equals(guess[j])) { //if the guess and the code have the same element at the same position
+        clues[countCurrTurn][countClues]="b"; //add a "b" to the clues array
+        countClues++; //add one to the counter counting how many clues there are
       }
     }
     return clues;
@@ -182,14 +186,15 @@ public class CodeBreaker5 {
  * and in the same position in the second array
  */
   public static String[] removeFullyCorrect (String [] code, String [] guess) { 
-    int temp = 0;
-    String [] remFullyCorr = new String [code.length - countClues];
-    remCode = new String [remFullyCorr.length];
+    
+    int count = 0;
+    String [] remFullyCorr = new String [code.length - countClues]; //declare array with length equal to number of non-fully correct elements
+    remCode = new String [remFullyCorr.length]; //initialize array with length equal to number of non-fully correct elements
     for (int i = 0; i < code.length; i++) {
-      if (!code[i].equals(guess[i])) {
-        remFullyCorr[temp] = guess[i];
-        remCode[temp] = code[i]; 
-        temp++;
+      if (!code[i].equals(guess[i])) { //if elements do not match 
+        remFullyCorr[count] = guess[i];//store the guess in array
+        remCode[count] = code[i]; //store the code in array
+        count++; //add one to counter
       }
     }
     
@@ -222,25 +227,25 @@ public class CodeBreaker5 {
     return clues;
   }
 /**
- * Displays.
+ * Displays game
  * 
- * @param board [temp]
- * @param piecesCorrect [temp]
+ * @param guess the user's guesses
+ * @param clues the clues
  */   
   
-  public static void displayGame(String[][] board, String[][] piecesCorrect) {
+  public static void displayGame(String[][] guess, String[][] clues) {
     System.out.println("Guess        Clues");
     
     System.out.println("****************");
     
     for (int i=0; i<(countCurrTurn+1); i++) {
-      for (int j=0; j<board[i].length; j++) {
-        System.out.print(board[i][j] + " ");
+      for (int j=0; j<guess[i].length; j++) {
+        System.out.print(guess[i][j] + " ");
       }
       System.out.print("\t");
-      for (int k=0; k<piecesCorrect[i].length; k++) {
-        if (piecesCorrect[i][k] != null) {
-          System.out.print(piecesCorrect[i][k] + " ");
+      for (int k=0; k<clues[i].length; k++) {
+        if (clues[i][k] != null) {
+          System.out.print(clues[i][k] + " ");
         }
         
       }
