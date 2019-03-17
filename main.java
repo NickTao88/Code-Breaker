@@ -228,26 +228,32 @@ public class CodeBreaker6 {
     return clues;
   }
   /**
-   * Displays game
+   * Returns a string beginning with headers, followed by 16 '*',
+   * followed by the guess, followed by the clues up to the turn
+   * in which the user is on
    * 
    * @param guess the user's guesses
-   * @param clues the clues
+   * @param clues the clues 
+   * @return a string beginning with headers, followed by 16 '*',
+   * followed by the guess, followed by the clues up to the turn
+   * in which the user is on
    */   
   
   public static String displayGame(String[][] guess, String[][] clues) {
-    String results = "Guess\t\tClues\n****************\n";
+    String results = "Guess\t\tClues\n****************\n"; //initialize String with header and 16 '*'
     
+    //loop runs up to one more than the user's current turn (since they started at 0)
     for (int i=0; i<(countCurrTurn+1); i++) {
       for (int j=0; j<guess[i].length; j++) {
-        results+=(guess[i][j] + " ");
+        results+=(guess[i][j] + " "); //add one guess to results
       }
-      results+=("\t");
+      results+=("\t"); //add a tab space
       for (int k=0; k<clues[i].length; k++) {
         if (clues[i][k] != null) {
-          results+=(clues[i][k] + " ");
+          results+=(clues[i][k] + " ");//add clues to results
         }   
       }
-      results+="\n";
+      results+="\n"; //add a new line
     }
     return results;
   }
