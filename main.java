@@ -4,7 +4,7 @@
  * Assignment Name: Code Breaker
  */
 import java.util.*;
-public class CodeBreaker6 {
+public class main {
   
   //declare global variables
   static final int SIZE = 4;
@@ -71,14 +71,13 @@ public class CodeBreaker6 {
         }
       }
       
-      //if user wins, print conrgatulations method and number of guesses
+      //if user wins, print congratulations method and number of guesses
       if (userWins==true){
         System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
         break; //exit loop
       }
       
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
-      
       findColourCorrect(remCode, remFuCor); //call method to find colour correct
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
@@ -247,7 +246,7 @@ public class CodeBreaker6 {
       for (int j=0; j<guess[i].length; j++) {
         results+=(guess[i][j] + " "); //add one guess to results
       }
-      results+=("\t"); //add a tab space
+      results+=("\t\t"); //add a tab space
       for (int k=0; k<clues[i].length; k++) {
         if (clues[i][k] != null) {
           results+=(clues[i][k] + " ");//add clues to results
