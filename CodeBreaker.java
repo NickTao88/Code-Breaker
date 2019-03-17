@@ -4,14 +4,14 @@
  * Assignment Name: Code Breaker
  */
 import java.util.*;
-public class CodeBreaker5 {
+public class CodeBreaker6 {
   
   //declare global variables
   static final int SIZE = 4;
   static final int TRIES = 10;
   static String clues [][] = new String [TRIES][SIZE]; 
   static String validGuesses [][] = new String [TRIES][SIZE];
-  static int countClues=0;
+  static int countClues = 0;
   static Scanner sc = new Scanner (System.in);
   static String [] remCode;
   static int countCurrTurn = 0;
@@ -23,7 +23,7 @@ public class CodeBreaker5 {
     //welcome user and introduction
     System.out.println("Welcome to Code Breaker! Enter your name");
     //String name = sc.nextLine();
-   // System.out.println("Hey " +name +"! Let's get started!");
+    // System.out.println("Hey " +name +"! Let's get started!");
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
@@ -76,17 +76,17 @@ public class CodeBreaker5 {
         System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
         break; //exit loop
       }
-     
+      
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
       
-      findColourCorrect(remCode, remFuCor); //find colour correct
+      findColourCorrect(remCode, remFuCor); //call method to find colour correct
       
-      displayGame(validGuesses, clues); //display current game results
+      System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
       
       countCurrTurn++; //add one to counter which counts the current turn
     }
     
-    //if user did not win, print losing message and correct code
+    //if user did not win, print losing message and the correct code
     if (userWins==false) {
       System.out.print("I'm sorry, you lose. The correct code was ");
       for (int i = 0; i < code.length;i++) {
@@ -95,15 +95,15 @@ public class CodeBreaker5 {
       System.out.println("");
     }
   }
-/**
- * Returns an array of randomly generated characters (representing colours), 
- * from a String of colours.
- *
- * @param colours possible colours to generate a code from
- * @param size length of code
- * @return an array of randomly 
- * generated characters (representing colours)
- */
+  /**
+   * Returns an array of randomly generated characters (representing colours), 
+   * from a String of colours.
+   *
+   * @param colours possible colours to generate a code from
+   * @param size length of code
+   * @return an array of randomly 
+   * generated characters (representing colours)
+   */
   
   public static String[] createCode (String colours, int size) {
     Random ran = new Random ();
@@ -122,16 +122,16 @@ public class CodeBreaker5 {
     return code; 
   }
   
-/**
- * Returns true if guess is valid or
- * false if guess is invalid.
- *
- * @param userInput the guess from the user
- * @param colour possible colours
- * @param size length of code
- * @return true if guess is valid (correct characters and size)
- * or false if guess is invalid (incorrect characters and size)
- */
+  /**
+   * Returns true if guess is valid or
+   * false if guess is invalid.
+   *
+   * @param userInput the guess from the user
+   * @param colour possible colours
+   * @param size length of code
+   * @return true if guess is valid (correct characters and size)
+   * or false if guess is invalid (incorrect characters and size)
+   */
   
   public static boolean valid(String [] userInput, String colour, int size) {
     boolean lengthValid = false; 
@@ -156,15 +156,15 @@ public class CodeBreaker5 {
       return false; //return false if both criteria are not met
     }
   }
-/**
- * Returns an array containing a "b" for every correctly
- * positioned colour in the guess.
- *
- * @param code the randomly generated code
- * @param guess the user's guess
- * @return a list containing a "b" for every correctly
- * positioned colour in the guess
- */
+  /**
+   * Returns an array containing a "b" for every correctly
+   * positioned colour in the guess.
+   *
+   * @param code the randomly generated code
+   * @param guess the user's guess
+   * @return a list containing a "b" for every correctly
+   * positioned colour in the guess
+   */
   public static String[][] findFullyCorrect (String [] code, String [] guess) {  
     
     for (int j = 0; j < code.length; j++) {
@@ -175,17 +175,17 @@ public class CodeBreaker5 {
     }
     return clues;
   }
-/**
- * Returns an array that is the result of removing
- * from the first array all chars that are the same 
- * and in the same position in the second array.
- *
- * @param code the randomly generated code
- * @param guess the user's guess
- * @return an array that is the result of removing
- * from the first array all chars that are the same 
- * and in the same position in the second array
- */
+  /**
+   * Returns an array that is the result of removing
+   * from the first array all chars that are the same 
+   * and in the same position in the second array.
+   *
+   * @param code the randomly generated code
+   * @param guess the user's guess
+   * @return an array that is the result of removing
+   * from the first array all chars that are the same 
+   * and in the same position in the second array
+   */
   public static String[] removeFullyCorrect (String [] code, String [] guess) { 
     
     int count = 0;
@@ -201,56 +201,60 @@ public class CodeBreaker5 {
     
     return remFullyCorr;
   }
-/**
- * Returns an array containing a "w" for every String in the
- * second array that has the same value as the String in the
- * first array but different position.
- * 
- * @param code the randomly generated code after fully 
- * correct elements are removed
- * @param userInput the user's guess after fully correct 
- * elements are removed
- * @return an array that is the result of removing
- * from the first array all chars that are the same 
- * and in the same position in the second array
- */ 
+  /**
+   * Returns an array containing a "w" for every String in the
+   * second array that has the same value as the String in the
+   * first array but different position.
+   * 
+   * @param code the randomly generated code after fully 
+   * correct elements are removed
+   * @param userInput the user's guess after fully correct 
+   * elements are removed
+   * @return an array that is the result of removing
+   * from the first array all chars that are the same 
+   * and in the same position in the second array
+   */ 
+  
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
-    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput));
-    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));
+    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
     for (int i=0; i < codeList.size(); i++) {
-      if (input.contains(codeList.get(i))) {
-        clues[countCurrTurn][countClues] = "w";
-        countClues++;
-        codeList.set(i,"");
+      if (input.contains(codeList.get(i))) { //if input contains an element from the code
+        clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
+        countClues++; //add one to counter to count number of clues
       }
     }
-    countClues = 0;
+    countClues = 0; //reset counter
     return clues;
   }
-/**
- * Displays game
- * 
- * @param guess the user's guesses
- * @param clues the clues
- */   
+  /**
+   * Returns a string beginning with headers, followed by 16 '*',
+   * followed by the guess, followed by the clues up to the turn
+   * in which the user is on
+   * 
+   * @param guess the user's guesses
+   * @param clues the clues 
+   * @return a string beginning with headers, followed by 16 '*',
+   * followed by the guess, followed by the clues up to the turn
+   * in which the user is on
+   */   
   
-  public static void displayGame(String[][] guess, String[][] clues) {
-    System.out.println("Guess        Clues");
+  public static String displayGame(String[][] guess, String[][] clues) {
+    String results = "Guess\t\tClues\n****************\n"; //initialize String with header and 16 '*'
     
-    System.out.println("****************");
-    
+    //loop runs up to one more than the user's current turn (since they started at 0)
     for (int i=0; i<(countCurrTurn+1); i++) {
       for (int j=0; j<guess[i].length; j++) {
-        System.out.print(guess[i][j] + " ");
+        results+=(guess[i][j] + " "); //add one guess to results
       }
-      System.out.print("\t");
+      results+=("\t"); //add a tab space
       for (int k=0; k<clues[i].length; k++) {
         if (clues[i][k] != null) {
-          System.out.print(clues[i][k] + " ");
-        }
-        
+          results+=(clues[i][k] + " ");//add clues to results
+        }   
       }
-      System.out.println();
+      results+="\n"; //add a new line
     }
+    return results;
   }
 }
