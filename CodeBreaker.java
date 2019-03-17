@@ -22,8 +22,8 @@ public class CodeBreaker5 {
     
     //welcome user and introduction
     System.out.println("Welcome to Code Breaker! Enter your name");
-    String name = sc.nextLine();
-    System.out.println("Hey " +name +"! Let's get started!");
+    //String name = sc.nextLine();
+   // System.out.println("Hey " +name +"! Let's get started!");
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
@@ -104,6 +104,7 @@ public class CodeBreaker5 {
  * @return an array of randomly 
  * generated characters (representing colours)
  */
+  
   public static String[] createCode (String colours, int size) {
     Random ran = new Random ();
     String [] code = new String [SIZE];
@@ -220,7 +221,7 @@ public class CodeBreaker5 {
       if (input.contains(codeList.get(i))) {
         clues[countCurrTurn][countClues] = "w";
         countClues++;
-        codeList.remove(i);
+        codeList.set(i,"");
       }
     }
     countClues = 0;
