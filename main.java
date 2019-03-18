@@ -2,6 +2,7 @@
  * Name: Nicholas Tao and Rohan Ravindran
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
+ * Course: ICS-4U1
  */
 import java.util.*;
 public class main {
@@ -27,15 +28,14 @@ public class main {
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
-
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
       
-      boolean isValid;
+      boolean isValid; //declaring boolean variable which will be used to check if the user input is valid or invalid
       
       //prompt user for input
-      System.out.println("Please enter your guess of length " +SIZE +" using the letters [G,R,B,Y,O,P]");
-      String guessStr = sc.nextLine();
+      System.out.println("Please enter your guess of length " + SIZE +" using the letters [G,R,B,Y,O,P]"); 
+      String guessStr = sc.nextLine(); //getting user input from console
       
       //declare array with length the length of the guess
       String[] guess = new String[guessStr.length()];
@@ -45,12 +45,12 @@ public class main {
         guess[i] = Character.toString(guessStr.charAt(i));
       }
       
-      isValid = valid (guess, VALID_CHARS, SIZE); //check if input is valid
+      isValid = valid(guess, VALID_CHARS, SIZE); //check if input is valid
       
       //if input is invalid, run the loop again 
       if (isValid==false) {
         System.err.println("Invalid Input! Try Again!"); //print error message
-        currTurn--;
+        currTurn--; //increment the for loop counter down 1 because input is invalid
         continue;
       } 
       
@@ -59,7 +59,7 @@ public class main {
         validGuesses[currTurn][i] = guess[i];
       }
       
-      findFullyCorrect (code, guess);//call method to find fully correct colours
+      findFullyCorrect (code, guess); //call method to find fully correct colours
       
       //check if the clues are all "b", meaning guess is fully correct
       for (int a = 0; a < SIZE; a++) {
@@ -73,12 +73,12 @@ public class main {
       
       //if user wins, print congratulations method and number of guesses
       if (userWins==true){
-        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
+        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
         break; //exit loop
       }
       
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
-
+      
       findColourCorrect(remCode, remFuCor); //call method to find colour correct
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
@@ -96,18 +96,19 @@ public class main {
     }
   }
   /**
-   * Returns an array of randomly generated characters (representing colours), 
-   * from a String of colours.
+   * Returns an array of some length containing randomly generated characters (representing colours), 
+   * from a String of colours and an integer representing the amount of colours to generate. The returned
+   * array is used as a code which a user then has to guess.
    *
    * @param colours possible colours to generate a code from
    * @param size length of code
-   * @return an array of randomly 
+   * @return an array of randomly
    * generated characters (representing colours)
    */
   
   public static String[] createCode (String colours, int size) {
     Random ran = new Random ();
-    String [] code = new String [SIZE];
+    String [] code = new String [SIZE]; //initializing an array with length size to hold the randomly generated colours
     for (int i = 0; i < size; i++) {
       int num = ran.nextInt(colours.length()-1); //generate a random number from 0 to one less the number of colours
       char c = colours.charAt(num); //find the character in the colours string at the randomly generated position
@@ -119,12 +120,14 @@ public class main {
       System.out.print(code[i]); //temporary
     }
     System.out.println(""); //temporary
-    return code; 
+    return code; //return the array containing the randomly generated colours to the main method
   }
   
   /**
-   * Returns true if guess is valid or
-   * false if guess is invalid.
+   * Returns true if user input is valid or
+   * false if user input is invalid. Method is used to check if a 
+   * string of colours is the correct size, and contains valid 
+   * colours.
    *
    * @param userInput the guess from the user
    * @param colour possible colours
@@ -141,7 +144,7 @@ public class main {
       lengthValid = true;
     }
     
-    boolean colourValid = true;
+    boolean colourValid = true; //initializing a boolean variable to hold whether the colours are correct in the user input
     for (int i=0; i<userInput.length; i++) {
       //check if the valid colours contain the user's guess and if the user's input is blank
       if (!colour.contains(userInput[i]) || userInput[i].equals("")) {
@@ -153,7 +156,7 @@ public class main {
     if (lengthValid == true && colourValid == true) {
       return true; //returns true if length and colours are valid
     } else {
-      return false; //return false if both criteria are not met
+      return false; //return false if one or both criteria are not met
     }
   }
   /**
@@ -176,9 +179,10 @@ public class main {
     return clues;
   }
   /**
-   * Returns an array that is the result of removing
-   * from the first array all chars that are the same 
-   * and in the same position in the second array.
+   * Returns an array that is the result of removing 
+   * every correctly positioned colour in the user input,
+   * and adding the colours that were not removed to a 
+   * new array.
    *
    * @param code the randomly generated code
    * @param guess the user's guess
@@ -188,7 +192,7 @@ public class main {
    */
   public static String[] removeFullyCorrect (String [] code, String [] guess) { 
     
-    int count = 0;
+    int count = 0; //initializing a counter
     String [] remFullyCorr = new String [code.length - countClues]; //declare array with length equal to number of non-fully correct elements
     remCode = new String [remFullyCorr.length]; //initialize array with length equal to number of non-fully correct elements
     for (int i = 0; i < code.length; i++) {
@@ -203,8 +207,8 @@ public class main {
   }
   /**
    * Returns an array containing a "w" for every String in the
-   * second array that has the same value as the String in the
-   * first array but different position.
+   * user input that has the same value as the String in the
+   * code but different position.
    * 
    * @param code the randomly generated code after fully 
    * correct elements are removed
@@ -216,36 +220,22 @@ public class main {
    */ 
   
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
-	ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
-	ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
-	HashMap<String, Integer> duplicates = new HashMap<String, Integer>();
-	HashMap<String, Integer> duplicatesInInput = new HashMap<String, Integer>();
-
-	for (int i=0; i<codeList.size(); i++) {
-			duplicatesInInput.put(input.get(i), 0);
-			if (!duplicates.containsKey(codeList.get(i))) {
-				duplicates.put(codeList.get(i), 1);
-			} else {
-				duplicates.put(codeList.get(i), duplicates.get(codeList.get(i)) + 1);
-			}
-	}
-
-	for (int i=0; i<codeList.size(); i++) {
-			if (codeList.contains(input.get(i)) && duplicatesInInput.get(input.get(i)) < duplicates.get(input.get(i))) {
-				clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
-		        countClues++; //add one to counter to count number of clues
-		        duplicatesInInput.put(input.get(i), duplicatesInInput.get(input.get(i)) + 1);
-			}
-	}
-
-	countClues = 0; //reset counter
-	return clues;
+    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
+    for (int i=0; i < codeList.size(); i++) {
+      if (input.contains(codeList.get(i))) { //if input contains an element from the code
+        clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
+        countClues++; //add one to counter to count number of clues
+        input.remove(codeList.get(i));
+      }
+    }
+    countClues = 0; //reset counter
+    return clues;
   }
-  
   /**
    * Returns a string beginning with headers, followed by 16 '*',
    * followed by the guess, followed by the clues up to the turn
-   * in which the user is on
+   * in which the user is on.
    * 
    * @param guess the user's guesses
    * @param clues the clues 
@@ -258,18 +248,18 @@ public class main {
     String results = "Guess\t\tClues\n****************\n"; //initialize String with header and 16 '*'
     
     //loop runs up to one more than the user's current turn (since they started at 0)
-    for (int i=0; i<(countCurrTurn+1); i++) {
-      for (int j=0; j<guess[i].length; j++) {
+    for (int i = 0; i < (countCurrTurn + 1); i++) {
+      for (int j = 0; j < guess[i].length; j++) {
         results+=(guess[i][j] + " "); //add one guess to results
       }
       results+=("\t\t"); //add a tab space
       for (int k=0; k<clues[i].length; k++) {
-        if (clues[i][k] != null) {
+        if (clues[i][k] != null) { //check if the clues are not empty
           results+=(clues[i][k] + " ");//add clues to results
         }   
       }
       results+="\n"; //add a new line
     }
-    return results;
+    return results; //return the string containing the output
   }
 }
