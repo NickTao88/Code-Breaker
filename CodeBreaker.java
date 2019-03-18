@@ -26,7 +26,8 @@ public class CodeBreaker6 {
     // System.out.println("Hey " +name +"! Let's get started!");
     
     //generate code and store in array
-    String [] code = createCode(VALID_CHARS, SIZE);
+    //String [] code = createCode(VALID_CHARS, SIZE);
+    String [] code = {"B", "R", "B", "G"};
     
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
@@ -71,13 +72,14 @@ public class CodeBreaker6 {
         }
       }
       
-      //if user wins, print congratulations method and number of guesses
+      //if user wins, print conrgatulations method and number of guesses
       if (userWins==true){
         System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
         break; //exit loop
       }
       
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
+      
       findColourCorrect(remCode, remFuCor); //call method to find colour correct
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
@@ -215,12 +217,13 @@ public class CodeBreaker6 {
    */ 
   
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
-    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+   ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
     ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
     for (int i=0; i < codeList.size(); i++) {
       if (input.contains(codeList.get(i))) { //if input contains an element from the code
         clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
         countClues++; //add one to counter to count number of clues
+        input.remove(codeList.get(i));
       }
     }
     countClues = 0; //reset counter
@@ -229,7 +232,7 @@ public class CodeBreaker6 {
   /**
    * Returns a string beginning with headers, followed by 16 '*',
    * followed by the guess, followed by the clues up to the turn
-   * in which the user is on
+   * in which the user is on.
    * 
    * @param guess the user's guesses
    * @param clues the clues 
@@ -242,8 +245,8 @@ public class CodeBreaker6 {
     String results = "Guess\t\tClues\n****************\n"; //initialize String with header and 16 '*'
     
     //loop runs up to one more than the user's current turn (since they started at 0)
-    for (int i=0; i<(countCurrTurn+1); i++) {
-      for (int j=0; j<guess[i].length; j++) {
+    for (int i = 0; i < (countCurrTurn + 1); i++) {
+      for (int j = 0; j < guess[i].length; j++) {
         results+=(guess[i][j] + " "); //add one guess to results
       }
       results+=("\t"); //add a tab space
