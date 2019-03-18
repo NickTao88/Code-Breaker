@@ -27,7 +27,7 @@ public class main {
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
-    
+
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
       
@@ -78,6 +78,7 @@ public class main {
       }
       
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
+
       findColourCorrect(remCode, remFuCor); //call method to find colour correct
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
@@ -215,17 +216,32 @@ public class main {
    */ 
   
   public static String[][] findColourCorrect(String[] code, String[] userInput) {
-    ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
-    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
-    for (int i=0; i < codeList.size(); i++) {
-      if (input.contains(codeList.get(i))) { //if input contains an element from the code
-        clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
-        countClues++; //add one to counter to count number of clues
-      }
-    }
-    countClues = 0; //reset counter
-    return clues;
+	ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+	ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
+	HashMap<String, Integer> duplicates = new HashMap<String, Integer>();
+	HashMap<String, Integer> duplicatesInInput = new HashMap<String, Integer>();
+
+	for (int i=0; i<codeList.size(); i++) {
+			duplicatesInInput.put(input.get(i), 0);
+			if (!duplicates.containsKey(codeList.get(i))) {
+				duplicates.put(codeList.get(i), 1);
+			} else {
+				duplicates.put(codeList.get(i), duplicates.get(codeList.get(i)) + 1);
+			}
+	}
+
+	for (int i=0; i<codeList.size(); i++) {
+			if (codeList.contains(input.get(i)) && duplicatesInInput.get(input.get(i)) < duplicates.get(input.get(i))) {
+				clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
+		        countClues++; //add one to counter to count number of clues
+		        duplicatesInInput.put(input.get(i), duplicatesInInput.get(input.get(i)) + 1);
+			}
+	}
+
+	countClues = 0; //reset counter
+	return clues;
   }
+  
   /**
    * Returns a string beginning with headers, followed by 16 '*',
    * followed by the guess, followed by the clues up to the turn
