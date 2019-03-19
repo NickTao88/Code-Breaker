@@ -2,6 +2,7 @@
  * Name: Nicholas Tao and Rohan Ravindran
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
+ * THIS IS VERSION BEFORE RETURNING 2 SEP ARRAYS THEN STORING THEM IN 2D ARRAY AFTER
  */
 import java.util.*;
 public class CodeBreaker6 {
@@ -21,22 +22,20 @@ public class CodeBreaker6 {
     boolean userWins = false; 
     
     //welcome user and introduction
-    System.out.println("Welcome to Code Breaker! Enter your name");
-    //String name = sc.nextLine();
-    // System.out.println("Hey " +name +"! Let's get started!");
+    System.out.println("Welcome to Code Breaker!");
     
     //generate code and store in array
-    //String [] code = createCode(VALID_CHARS, SIZE);
-    String [] code = {"B", "R", "B", "G"};
+    String [] code = createCode(VALID_CHARS, SIZE);
+    //String [] code = {"B", "R", "B", "G"}; //TESTING
     
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
       
-      boolean isValid;
+      boolean isValid; //declaring boolean variable which will be used to check if the user input is valid or invalid
       
       //prompt user for input
-      System.out.println("Please enter your guess of length " +SIZE +" using the letters [G,R,B,Y,O,P]");
-      String guessStr = sc.nextLine();
+      System.out.println("Please enter your guess of length " + SIZE +" using the letters [G,R,B,Y,O,P]");
+      String guessStr = sc.nextLine(); //store input in String
       
       //declare array with length the length of the guess
       String[] guess = new String[guessStr.length()];
@@ -46,12 +45,12 @@ public class CodeBreaker6 {
         guess[i] = Character.toString(guessStr.charAt(i));
       }
       
-      isValid = valid (guess, VALID_CHARS, SIZE); //check if input is valid
+      isValid = valid(guess, VALID_CHARS, SIZE); //check if input is valid
       
       //if input is invalid, run the loop again 
       if (isValid==false) {
         System.err.println("Invalid Input! Try Again!"); //print error message
-        currTurn--;
+        currTurn--; //increment the for loop counter down 1 because input is invalid
         continue;
       } 
       
@@ -72,9 +71,9 @@ public class CodeBreaker6 {
         }
       }
       
-      //if user wins, print conrgatulations method and number of guesses
+      //if user wins
       if (userWins==true){
-        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code");
+        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
         break; //exit loop
       }
       
@@ -97,8 +96,11 @@ public class CodeBreaker6 {
     }
   }
   /**
-   * Returns an array of randomly generated characters (representing colours), 
-   * from a String of colours.
+   * Returns an array of some length containing randomly 
+   * generated characters (representing colours), 
+   * from a String of colours and an integer representing 
+   * the amount of colours to generate. The returned array 
+   * is used as a code which a user then has to guess.
    *
    * @param colours possible colours to generate a code from
    * @param size length of code
@@ -108,7 +110,7 @@ public class CodeBreaker6 {
   
   public static String[] createCode (String colours, int size) {
     Random ran = new Random ();
-    String [] code = new String [SIZE];
+    String [] code = new String [SIZE]; //initializing an array with length SIZE to hold the randomly generated colours
     for (int i = 0; i < size; i++) {
       int num = ran.nextInt(colours.length()-1); //generate a random number from 0 to one less the number of colours
       char c = colours.charAt(num); //find the character in the colours string at the randomly generated position
@@ -120,12 +122,12 @@ public class CodeBreaker6 {
       System.out.print(code[i]); //temporary
     }
     System.out.println(""); //temporary
-    return code; 
+    return code; //return the array containing the randomly generated colours to the main method
   }
   
   /**
-   * Returns true if guess is valid or
-   * false if guess is invalid.
+   * Returns true if guess is valid (correct size and valid colours entered) 
+   * or false if guess is invalid.
    *
    * @param userInput the guess from the user
    * @param colour possible colours
@@ -135,7 +137,7 @@ public class CodeBreaker6 {
    */
   
   public static boolean valid(String [] userInput, String colour, int size) {
-    boolean lengthValid = false; 
+    boolean lengthValid = false; //initializing a boolean variable to hold whether the colours are correct in the user input
     
     //if user's guess is the correct length, the length is valid
     if (userInput.length == size) {
@@ -154,7 +156,7 @@ public class CodeBreaker6 {
     if (lengthValid == true && colourValid == true) {
       return true; //returns true if length and colours are valid
     } else {
-      return false; //return false if both criteria are not met
+      return false; //return false if one or both criteria are not met
     }
   }
   /**
@@ -177,9 +179,10 @@ public class CodeBreaker6 {
     return clues;
   }
   /**
-   * Returns an array that is the result of removing
-   * from the first array all chars that are the same 
-   * and in the same position in the second array.
+   * Returns an array that is the result of removing 
+   * every correctly positioned colour in the user input,
+   * and adding the colours that were not removed to a 
+   * new array
    *
    * @param code the randomly generated code
    * @param guess the user's guess
@@ -189,7 +192,7 @@ public class CodeBreaker6 {
    */
   public static String[] removeFullyCorrect (String [] code, String [] guess) { 
     
-    int count = 0;
+    int count = 0; //initializing a counter
     String [] remFullyCorr = new String [code.length - countClues]; //declare array with length equal to number of non-fully correct elements
     remCode = new String [remFullyCorr.length]; //initialize array with length equal to number of non-fully correct elements
     for (int i = 0; i < code.length; i++) {
@@ -204,8 +207,8 @@ public class CodeBreaker6 {
   }
   /**
    * Returns an array containing a "w" for every String in the
-   * second array that has the same value as the String in the
-   * first array but different position.
+   * user input that has the same value as the String in the
+   * code but different position.
    * 
    * @param code the randomly generated code after fully 
    * correct elements are removed
@@ -251,12 +254,12 @@ public class CodeBreaker6 {
       }
       results+=("\t"); //add a tab space
       for (int k=0; k<clues[i].length; k++) {
-        if (clues[i][k] != null) {
+        if (clues[i][k] != null) { //check if the clues are not empty
           results+=(clues[i][k] + " ");//add clues to results
         }   
       }
       results+="\n"; //add a new line
     }
-    return results;
+    return results; //return the string containing the output
   }
 }
