@@ -60,15 +60,13 @@ public class CodeBreaker7 {
       
       String [] cluesB = findFullyCorrect (code, guess);//call method to find fully correct colours
       
-      //check if the clues are all "b", meaning guess is fully correct
-      for (int a = 0; a < SIZE; a++) {
-        if (clues[currTurn][a] == "b") {
-          userWins = true; 
+      //if there are 4 "b"s, the user's guess is fully correct
+        if (cluesB.length==4) {
+          userWins = true; //set userWins to true
         } else {
-          userWins = false;
-          break; //if one clue is not "b", stop checking (break)
+          userWins = false; //if not fully correct, set userWins to false
         }
-      }
+      
       
       //if user wins
       if (userWins==true){
@@ -235,6 +233,7 @@ public class CodeBreaker7 {
         input.remove(codeList.get(i));
       }
     }
+    countClues=0;
     return cluesW.toArray(new String[0]);
   }
   
