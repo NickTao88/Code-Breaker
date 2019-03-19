@@ -235,7 +235,6 @@ public class CodeBreaker7 {
         input.remove(codeList.get(i));
       }
     }
-    System.out.println(cluesW);
     return cluesW.toArray(new String[0]);
   }
   
