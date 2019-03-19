@@ -2,10 +2,9 @@
  * Name: Nicholas Tao and Rohan Ravindran
  * Date: March 4, 2019
  * Assignment Name: Code Breaker
- * THIS IS VERSION BEFORE RETURNING 2 SEP ARRAYS THEN STORING THEM IN 2D ARRAY AFTER
  */
 import java.util.*;
-public class CodeBreaker6 {
+public class CodeBreaker7 {
   
   //declare global variables
   static final int SIZE = 4;
@@ -59,7 +58,7 @@ public class CodeBreaker6 {
         validGuesses[currTurn][i] = guess[i];
       }
       
-      findFullyCorrect (code, guess);//call method to find fully correct colours
+      String [] cluesB = findFullyCorrect (code, guess);//call method to find fully correct colours
       
       //check if the clues are all "b", meaning guess is fully correct
       for (int a = 0; a < SIZE; a++) {
@@ -79,7 +78,14 @@ public class CodeBreaker6 {
       
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
       
-      findColourCorrect(remCode, remFuCor); //call method to find colour correct
+      String [] cluesW = findColourCorrect(remCode, remFuCor); //call method to find colour correct
+      
+      for (int i = 0; i < cluesB.length; i++) {
+        clues[currTurn][i]=cluesB[i];
+      }
+      for (int i = 0; i < cluesW.length; i++) {
+        clues[currTurn][i+cluesB.length]=cluesW[i];
+      }
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
       
@@ -168,15 +174,15 @@ public class CodeBreaker6 {
    * @return a list containing a "b" for every correctly
    * positioned colour in the guess
    */
-  public static String[][] findFullyCorrect (String [] code, String [] guess) {  
-    
+  public static String[] findFullyCorrect (String [] code, String [] guess) {  
+    ArrayList <String> cluesB = new ArrayList<String>();
     for (int j = 0; j < code.length; j++) {
       if (code[j].equals(guess[j])) { //if the guess and the code have the same element at the same position
-        clues[countCurrTurn][countClues]="b"; //add a "b" to the clues array
-        countClues++; //add one to the counter counting how many clues there are
+        cluesB.add("b"); //add a "b" to the clues array
+        countClues++;
       }
     }
-    return clues;
+    return cluesB.toArray(new String[0]);
   }
   /**
    * Returns an array that is the result of removing 
@@ -219,19 +225,20 @@ public class CodeBreaker6 {
    * and in the same position in the second array
    */ 
   
-  public static String[][] findColourCorrect(String[] code, String[] userInput) {
-   ArrayList<String> input = new ArrayList<String>(Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
-    ArrayList<String> codeList = new ArrayList<String>(Arrays.asList(code));//arraylist with code after fully correct elements are removed
+  public static String[] findColourCorrect(String[] code, String[] userInput) {
+   ArrayList<String> input = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+    ArrayList<String> codeList = new ArrayList <String> (Arrays.asList(code));//arraylist with code after fully correct elements are removed
+    ArrayList <String> cluesW = new ArrayList <String> ();
     for (int i=0; i < codeList.size(); i++) {
       if (input.contains(codeList.get(i))) { //if input contains an element from the code
-        clues[countCurrTurn][countClues] = "w"; //add a 'w' to clues
-        countClues++; //add one to counter to count number of clues
+        cluesW.add("w"); //add a 'w' to clues
         input.remove(codeList.get(i));
       }
     }
-    countClues = 0; //reset counter
-    return clues;
+    System.out.println(cluesW);
+    return cluesW.toArray(new String[0]);
   }
+  
   /**
    * Returns a string beginning with headers, followed by 16 '*',
    * followed by the guess, followed by the clues up to the turn
