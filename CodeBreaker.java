@@ -26,9 +26,6 @@ public class CodeBreaker7 {
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
-    for (int i = 0; i  <25; i++) {
-    createCode(VALID_CHARS, SIZE);
-    }
     
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
@@ -50,7 +47,7 @@ public class CodeBreaker7 {
       isValid = valid(guess, VALID_CHARS, SIZE); //check if input is valid
       
       //if input is invalid
-      if (isValid==false) {
+      if (!isValid) {
         System.err.println("Invalid Input! Try Again!"); //print error message
         currTurn--; //increment the for loop counter down 1 because input is invalid
         continue; //run the loop again
@@ -88,10 +85,8 @@ public class CodeBreaker7 {
       //if user wins
       if (userWins){
         System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
-        
         break; //exit loop (the game)
       }
-      
       countCurrTurn++; //add one to counter which counts the current turn
     }
     
@@ -120,7 +115,7 @@ public class CodeBreaker7 {
    */
   
   public static String[] createCode (String colours, int size) {
-    Random ran = new Random ();
+    Random ran = new Random(); //declare a random object
     String [] code = new String [SIZE]; //initializing an array with length SIZE to hold the randomly generated colours
     for (int i = 0; i < size; i++) {
       int num = ran.nextInt(colours.length()); //generate a random number from 0 the number of colours
@@ -155,7 +150,7 @@ public class CodeBreaker7 {
     }
     
     boolean colourValid = true;
-    for (int i=0; i<userInput.length; i++) {
+    for (int i = 0; i < userInput.length; i++) {
       //check if the valid colours contain the user's guess and if the user's input is blank
       if (!colour.contains(userInput[i]) || userInput[i].equals("")) {
         colourValid = false;
@@ -163,7 +158,7 @@ public class CodeBreaker7 {
       }
     }
     
-    if (lengthValid == true && colourValid == true) {
+    if (lengthValid && colourValid) {
       return true; //returns true if length and colours are valid
     } else {
       return false; //return false if one or both criteria are not met
@@ -233,7 +228,7 @@ public class CodeBreaker7 {
     ArrayList<String> input = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
     ArrayList<String> codeList = new ArrayList <String> (Arrays.asList(code));//arraylist with code after fully correct elements are removed
     ArrayList <String> cluesW = new ArrayList <String> ();
-    for (int i=0; i < codeList.size(); i++) {
+    for (int i = 0; i < codeList.size(); i++) {
       if (input.contains(codeList.get(i))) { //if input contains an element from the code
         cluesW.add("w"); //add a 'w' to clues
         input.remove(codeList.get(i));
