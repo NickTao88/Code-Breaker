@@ -22,10 +22,13 @@ public class CodeBreaker7 {
     
     //welcome user and introduction
     System.out.println("Welcome to Code Breaker! Press ENTER to begin");
-    //sc.nextLine();
+    //sc.nextLine(); //add this back
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
+    for (int i = 0; i  <25; i++) {
+    createCode(VALID_CHARS, SIZE);
+    }
     
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
@@ -120,10 +123,9 @@ public class CodeBreaker7 {
     Random ran = new Random ();
     String [] code = new String [SIZE]; //initializing an array with length SIZE to hold the randomly generated colours
     for (int i = 0; i < size; i++) {
-      int num = ran.nextInt(colours.length()-1); //generate a random number from 0 to one less the number of colours
-      char c = colours.charAt(num); //find the character in the colours string at the randomly generated position
-      String s = String.valueOf(c); //convert the character to a String
-      code [i] = s; //store String in code array
+      int num = ran.nextInt(colours.length()); //generate a random number from 0 the number of colours
+      //find the character in the colours string at the randomly generated position and convert the character to a String which gets stored in code array
+      code [i] = String.valueOf(colours.charAt(num)); 
     }
     System.out.print("Code: "); //temporary
     for (int i = 0; i < code.length; i++) {
