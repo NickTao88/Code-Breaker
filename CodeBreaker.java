@@ -6,26 +6,26 @@
 import java.util.*;
 public class CodeBreaker7 {
   
-  //declare global variables
-  static final int SIZE = 4;
-  static final int TRIES = 10;
-  static String clues [][] = new String [TRIES][SIZE]; 
-  static String validGuesses [][] = new String [TRIES][SIZE];
-  static int countClues = 0;
-  static Scanner sc = new Scanner (System.in);
-  static String [] remCode;
-  static int countCurrTurn = 0;
+  static final int SIZE = 4; //declare size of code
+  static final int TRIES = 10; //declare number of tries
+  static int countClues = 0;//declare a counter to count the number of clues
+  static String [] remCode; //declare an array to store the code after fully correct elements are removed
+  static int countCurrTurn = 0; //declare a counter to count the current turn 
   
   public static void main(String [] args) {
-    final String VALID_CHARS = "GRBYOP";
-    boolean userWins = false; 
+    
+    Scanner sc = new Scanner (System.in); //declare scanner
+    final String VALID_CHARS = "GRBYOP"; //declare String to hold valid characters
+    String clues [][] = new String [TRIES][SIZE]; //declare a 2D array to store the clues
+    String validGuesses [][] = new String [TRIES][SIZE]; // declare a 2D array to store the valid guesses
+    boolean userWins = false; //set userWins to false (user does not start out winning right away)
     
     //welcome user and introduction
-    System.out.println("Welcome to Code Breaker!");
+    System.out.println("Welcome to Code Breaker! Press ENTER to begin");
+    //sc.nextLine();
     
     //generate code and store in array
     String [] code = createCode(VALID_CHARS, SIZE);
-    //String [] code = {"B", "R", "B", "G"}; //TESTING
     
     //main loop for game runs up to TRIES times
     for (int currTurn = 0; currTurn < TRIES; currTurn++) {
@@ -33,7 +33,7 @@ public class CodeBreaker7 {
       boolean isValid; //declaring boolean variable which will be used to check if the user input is valid or invalid
       
       //prompt user for input
-      System.out.println("Please enter your guess of length " + SIZE +" using the letters [G,R,B,Y,O,P]");
+      System.out.println("Please enter your guess of length " + SIZE +" using the letters " +VALID_CHARS);
       String guessStr = sc.nextLine(); //store input in String
       
       //declare array with length the length of the guess
@@ -46,11 +46,11 @@ public class CodeBreaker7 {
       
       isValid = valid(guess, VALID_CHARS, SIZE); //check if input is valid
       
-      //if input is invalid, run the loop again 
+      //if input is invalid
       if (isValid==false) {
         System.err.println("Invalid Input! Try Again!"); //print error message
         currTurn--; //increment the for loop counter down 1 because input is invalid
-        continue;
+        continue; //run the loop again
       } 
       
       //store valid guesses in the 2D array (needed for display method)
@@ -60,27 +60,28 @@ public class CodeBreaker7 {
       
       String [] cluesB = findFullyCorrect (code, guess);//call method to find fully correct colours
       
-      //if there are 4 "b"s, the user's guess is fully correct
-        if (cluesB.length==4) {
-          userWins = true; //set userWins to true
-        } else {
-          userWins = false; //if not fully correct, set userWins to false
-        }
-      
-      
-      //if user wins
-      if (userWins==true){
-        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
-        break; //exit loop
+      //if there are SIZE "b"s, the user's guess is fully correct (since all characters are the correct colour and in the correct position)
+      if (cluesB.length==SIZE) {
+        userWins = true; //set userWins to true
+      } else {
+        userWins = false; //if not fully correct, set userWins to false
       }
       
-      String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed as an array
+      //if user wins
+      if (userWins){
+        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
+        break; //exit loop (the game)
+      }
       
-      String [] cluesW = findColourCorrect(remCode, remFuCor); //call method to find colour correct
+      String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed in an array
       
+      String [] cluesW = findColourCorrect(remCode, remFuCor); //call method to find the elements in the guess which are only correct in colour
+      
+      //add the clues returned by findFullyCorrect to the 2D array which stores all the clues
       for (int i = 0; i < cluesB.length; i++) {
         clues[currTurn][i]=cluesB[i];
       }
+      //add the clues returned by findColourCorrect to the 2D array which stores all the clues
       for (int i = 0; i < cluesW.length; i++) {
         clues[currTurn][i+cluesB.length]=cluesW[i];
       }
@@ -91,7 +92,7 @@ public class CodeBreaker7 {
     }
     
     //if user did not win, print losing message and the correct code
-    if (userWins==false) {
+    if (!userWins) {
       System.out.print("I'm sorry, you lose. The correct code was ");
       for (int i = 0; i < code.length;i++) {
         System.out.print(code[i]);
@@ -99,6 +100,7 @@ public class CodeBreaker7 {
       System.out.println("");
     }
   }
+  
   /**
    * Returns an array of some length containing randomly 
    * generated characters (representing colours), 
@@ -180,7 +182,7 @@ public class CodeBreaker7 {
         countClues++;
       }
     }
-    return cluesB.toArray(new String[0]);
+    return cluesB.toArray(new String[0]); //return the clues as an array
   }
   /**
    * Returns an array that is the result of removing 
@@ -207,7 +209,7 @@ public class CodeBreaker7 {
       }
     }
     
-    return remFullyCorr;
+    return remFullyCorr; //return the array with fully correct elements removed from the guess
   }
   /**
    * Returns an array containing a "w" for every String in the
@@ -224,7 +226,7 @@ public class CodeBreaker7 {
    */ 
   
   public static String[] findColourCorrect(String[] code, String[] userInput) {
-   ArrayList<String> input = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+    ArrayList<String> input = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
     ArrayList<String> codeList = new ArrayList <String> (Arrays.asList(code));//arraylist with code after fully correct elements are removed
     ArrayList <String> cluesW = new ArrayList <String> ();
     for (int i=0; i < codeList.size(); i++) {
@@ -233,8 +235,9 @@ public class CodeBreaker7 {
         input.remove(codeList.get(i));
       }
     }
-    countClues=0;
-    return cluesW.toArray(new String[0]);
+    countClues = 0; //set countClues to 0 again so clues for next turn are counted properly
+    
+    return cluesW.toArray(new String[0]); //return the clues as an array
   }
   
   /**
