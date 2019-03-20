@@ -60,19 +60,6 @@ public class CodeBreaker7 {
       
       String [] cluesB = findFullyCorrect (code, guess);//call method to find fully correct colours
       
-      //if there are SIZE "b"s, the user's guess is fully correct (since all characters are the correct colour and in the correct position)
-      if (cluesB.length==SIZE) {
-        userWins = true; //set userWins to true
-      } else {
-        userWins = false; //if not fully correct, set userWins to false
-      }
-      
-      //if user wins
-      if (userWins){
-        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
-        break; //exit loop (the game)
-      }
-      
       String [] remFuCor = removeFullyCorrect (code, guess); //store the guess with the fully correct colours removed in an array
       
       String [] cluesW = findColourCorrect(remCode, remFuCor); //call method to find the elements in the guess which are only correct in colour
@@ -88,6 +75,20 @@ public class CodeBreaker7 {
       
       System.out.println(displayGame(validGuesses, clues)); //call method to display current game results
       
+      //if there are SIZE "b"s, the user's guess is fully correct (since all characters are the correct colour and in the correct position)
+      if (cluesB.length==SIZE) {
+        userWins = true; //set userWins to true
+      } else {
+        userWins = false; //if not fully correct, set userWins to false
+      }
+      
+      //if user wins
+      if (userWins){
+        System.out.println("Congratulations! It took you " +(currTurn+1) +" guess to find the code"); //print number of turns + 1 since counter starts at 0
+        
+        break; //exit loop (the game)
+      }
+      
       countCurrTurn++; //add one to counter which counts the current turn
     }
     
@@ -99,6 +100,7 @@ public class CodeBreaker7 {
       }
       System.out.println("");
     }
+    sc.close(); //close scanner
   }
   
   /**
