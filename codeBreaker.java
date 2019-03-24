@@ -5,7 +5,7 @@
  */
 
 import java.util.*;
-public class CodeBreaker7 {
+public class codeBreaker {
   
   static final int SIZE = 4; //declare size of code
   static final int TRIES = 10; //declare number of tries
@@ -95,11 +95,10 @@ public class CodeBreaker7 {
     
     //if user did not win, print losing message and the correct code
     if (!userWins) {
-      System.out.print("I'm sorry, you lose. The correct code was ");
+      System.out.print("I'm sorry "+name+", you lose. The correct code was ");
       for (int i = 0; i < code.length;i++) {
-        System.out.print(code[i]);
+        System.out.print(code[i]); //print code
       }
-      System.out.println("");
     }
     sc.close(); //close scanner
   }
@@ -181,6 +180,7 @@ public class CodeBreaker7 {
    * @return a list containing a "b" for every correctly
    * positioned colour in the guess
    */
+  
   public static String[] findFullyCorrect (String [] code, String [] guess) {  
     ArrayList <String> cluesB = new ArrayList<String>();
     
@@ -192,6 +192,7 @@ public class CodeBreaker7 {
     }
     return cluesB.toArray(new String[0]); //return the clues as an array
   }
+  
   /**
    * Returns an array that contains the colours that are not
    * in the correct position or not in the code, from the user's guess.
@@ -227,20 +228,20 @@ public class CodeBreaker7 {
    * correct elements are removed
    * @param userInput the user's current guess after fully 
    * correct elements are removed
-   * @return an array that is the result of removing
-   * from the first array all chars that are the same 
-   * and in the same position in the second array
+   * @return an array containing a "w" for every string in the
+   * user input that has the same value as the string in the
+   * code but different position
    */ 
   
   public static String[] findColourCorrect(String[] code, String[] userInput) {
-    ArrayList<String> input = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
+    ArrayList<String> inputList = new ArrayList <String> (Arrays.asList(userInput)); //arraylist with input after fully correct elements are removed
     ArrayList<String> codeList = new ArrayList <String> (Arrays.asList(code));//arraylist with code after fully correct elements are removed
     ArrayList <String> cluesW = new ArrayList <String> ();
     
     for (int i = 0; i < codeList.size(); i++) {
-      if (input.contains(codeList.get(i))) { //if input contains an element from the code
+      if (inputList.contains(codeList.get(i))) { //if input contains an element from the code
         cluesW.add("w"); //add a 'w' to clues
-        input.remove(codeList.get(i));
+        inputList.remove(codeList.get(i));
       }
     }
     countClues = 0; //set countClues to 0 again so clues for next turn are counted properly
@@ -255,9 +256,9 @@ public class CodeBreaker7 {
    * 
    * @param guess all of the user's guesses until their current turn
    * @param clues the clues given for each guess
-   * @return a string returns a string beginning with headers 
+   * @return a string beginning with headers 
    * "Guess" and "Clues", followed by 16 '*', and one column 
-   * with all the user's guesses and another column with all the clues.
+   * with all the user's guesses and another column with all the clues
    */   
   
   public static String displayGame(String[][] guess, String[][] clues) {
@@ -269,7 +270,7 @@ public class CodeBreaker7 {
         results+=(guess[i][j] + " "); //add one guess to results
       }
       
-      results+=("\t"); //add a tab space
+      results+=("\t"); //add a tab space to seperate guesses and clues
       
       for (int k=0; k<clues[i].length; k++) {
         if (clues[i][k] != null) { //check if the clues are not empty
